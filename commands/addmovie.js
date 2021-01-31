@@ -6,7 +6,7 @@ module.exports = {
 	args: true,
 	execute: async function(message, args) {
 
-		const movieName = args[0];
+		const movieName = args[0].substring(1, args[0].length - 1);
 		const movieGerne = args[1];
 		const moviePlattform = args[2];
 
