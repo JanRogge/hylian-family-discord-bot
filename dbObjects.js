@@ -14,6 +14,7 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 
 const Movie = require('./models/Movies')(sequelize, Sequelize.DataTypes);
 const Gerne = require('./models/Gerne')(sequelize, Sequelize.DataTypes);
+const User_bans = require('./models/User_bans')(sequelize, Sequelize.DataTypes);
 
 
-module.exports = { Movie, Gerne };
+module.exports = { Movie, Gerne, User_bans };
