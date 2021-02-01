@@ -1,6 +1,11 @@
 require('dotenv').config();
-const { prefix } = require('./config.json');
+// const { prefix } = require('./config.json');
 const Discord = require('discord.js');
+// const Keyv = require('keyv');
+
+// const prefixes = new Keyv(process.env.DATABASE_URL);
+
+const prefix = process.env.PREFIX;
 
 const client = new Discord.Client();
 
