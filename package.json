@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^12.5.1",
+    "dotenv": "^8.2.0",
     "eslint": "^7.19.0",
     "sequelize": "^6.5.0",
     "sqlite3": "^5.0.1"

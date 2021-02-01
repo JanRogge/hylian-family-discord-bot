@@ -1,3 +1,4 @@
+require('dotenv').config(); 
 const config = require('./config.json');
 const Discord = require('discord.js');
 const fs = require('fs');
@@ -41,4 +42,4 @@ client.on('message', async message => {
 	}
 });
 
-client.login(config.BOT_TOKEN);
+client.login();
