@@ -1,4 +1,4 @@
-const { Movie } = require('../dbObjects');
+const { Movie } = require('../../dbObjects');
 
 module.exports = {
 	name: 'edit',

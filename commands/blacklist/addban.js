@@ -1,4 +1,4 @@
-const { User_bans } = require('../dbObjects');
+const { User_bans } = require('../../dbObjects');
 
 module.exports = {
 	name: 'ban',

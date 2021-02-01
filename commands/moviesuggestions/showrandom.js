@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const { Movie } = require('../dbObjects');
+const { Movie } = require('../../dbObjects');
 
 module.exports = {
 	name: 'random',

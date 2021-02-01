@@ -1,4 +1,4 @@
-const { Movie } = require('../dbObjects');
+const { Movie } = require('../../dbObjects');
 const Discord = require('discord.js');
 
 module.exports = {

@@ -1,4 +1,4 @@
-const { Gerne } = require('../dbObjects');
+const { Gerne } = require('../../dbObjects');
 
 module.exports = {
 	name: 'add-gerne',
