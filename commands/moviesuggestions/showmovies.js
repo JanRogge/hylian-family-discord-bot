@@ -6,7 +6,8 @@ module.exports = {
 	description: 'Show all Movie!',
 	category: 'moviesuggestions',
 	aliases: ['show', 'showAll'],
-	channelWhitelist: ['791703686912016405'],
+	channelWhitelist: ['789139711829737522', '791703686912016405'],
+	roles: ['766633420713230336', '599906769589764097'],
 	usage: '<Genre> | empty',
 	execute: async function(message, args) {
 

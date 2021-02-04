@@ -5,6 +5,7 @@ module.exports = {
 	description: 'Ban a user!',
 	category: 'blacklist',
 	aliases: ['ban'],
+	channelWhitelist: [''],
 	args: true,
 	execute: async function(message, args) {
 

@@ -1,8 +1,6 @@
 require('dotenv').config();
-// const { prefix } = require('./config.json');
 const Discord = require('discord.js');
-
-const prefix = process.env.PREFIX;
+const { Settings } = require('./dbObjects');
 
 const client = new Discord.Client(
 	{
@@ -22,11 +20,37 @@ client.once('ready', () => {
 	console.log('Ready!');
 });
 
+client.on('guildCreate', async guild => {
+	try {
+		await Settings.create({
+			guild_id: guild.id,
+			prefix: process.env.PREFIX,
+		});
+	}
+	catch (e) {
+		console.log(e);
+	}
+});
+
+client.on('guildDelete', async guild => {
+	await Settings.destroy({ where: { guild_id: guild.id } });
+});
+
 client.on('message', async message => {
+	let prefix;
+	if (message.guild) {
+		const settings = await Settings.findOne({
+			where: { guild_id: message.guild.id },
+		});
+		prefix = settings.prefix;
+	}
+	else {
+		prefix = process.env.PREFIX;
+	}
+
 	if (!message.content.startsWith(prefix) || message.author.bot) return;
 
-	const args = message.content.slice(prefix.length).trim().match(/\w+|"(?:\\"|[^"])+"/g);
-	// const args = message.content.slice(prefix.length).trim().split(/ +/);
+	const args = message.content.slice(prefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
 
 	const command = client.commands.get(commandName)
@@ -41,6 +65,13 @@ client.on('message', async message => {
 	if (command.channelWhitelist) {
 		if (!command.channelWhitelist.includes(message.channel.id)) {
 			return message.reply('Der Befehl ist in diesem Channel nicht erlaubt.');
+		}
+	}
+
+	if (command.roles) {
+		const roles = message.member.roles.cache;
+		if (roles.filter(role => command.roles.includes(role.id)).size === 0) {
+			return message.reply('Du kannst das nicht!');
 		}
 	}
 

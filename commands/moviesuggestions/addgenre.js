@@ -5,17 +5,18 @@ module.exports = {
 	description: 'Adds a movie gerne!',
 	category: 'moviesuggestions',
 	aliases: ['addg'],
+	channelWhitelist: ['789139711829737522', '791703686912016405'],
+	roles: ['766633420713230336', '599906769589764097'],
 	args: true,
 	execute: async function(message, args) {
 
-		const movieName = args[0];
-		const movieColor = args[1];
+		const genreName = args[0];
+		const genreColor = args[1];
 
 		try {
-			// equivalent to: INSERT INTO tags (name, descrption, username) values (?, ?, ?);
 			const movie = await Genre.create({
-				name: movieName,
-				color: movieColor,
+				name: genreName,
+				color: genreColor,
 			});
 			return message.reply(`Gerne ${movie.name} wurde hinzugefügt.`);
 		}

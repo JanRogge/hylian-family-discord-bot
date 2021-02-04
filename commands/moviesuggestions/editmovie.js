@@ -5,10 +5,12 @@ module.exports = {
 	description: 'Edit Movie genre!',
 	category: 'moviesuggestions',
 	aliases: ['edit'],
+	channelWhitelist: ['789139711829737522', '791703686912016405'],
+	roles: ['766633420713230336', '599906769589764097'],
 	args: true,
 	execute: async function(message, args) {
-		const movieName = args[0];
-		const movieGenreName = args[1];
+		const movieName = args.slice(0, -1).join(' ');
+		const movieGenreName = args.slice(-1);
 		const movieGenre = await Genre.findOne({ where: { name: movieGenreName } });
 
 		if (!movieGenre) {

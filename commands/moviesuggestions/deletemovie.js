@@ -5,9 +5,11 @@ module.exports = {
 	description: 'Delete Movie!',
 	category: 'moviesuggestions',
 	aliases: ['delete'],
+	channelWhitelist: ['789139711829737522', '791703686912016405'],
+	roles: ['766633420713230336', '599906769589764097'],
 	args: true,
 	execute: async function(message, args) {
-		const movieName = args[0];
+		const movieName = args.join(' ');
 
 		const rowCount = await Movie.destroy({ where: { name: movieName } });
 		if (!rowCount) return message.reply('That movie did not exist.');
