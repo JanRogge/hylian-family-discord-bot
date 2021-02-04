@@ -1,4 +1,4 @@
-const { Movie } = require('../../dbObjects');
+const { Movie, Genre } = require('../../dbObjects');
 const Discord = require('discord.js');
 
 module.exports = {
@@ -6,39 +6,54 @@ module.exports = {
 	description: 'Show all Movie!',
 	category: 'moviesuggestions',
 	aliases: ['show', 'showAll'],
-	args: false,
-	execute: async function(message) {
-		const movieList = await Movie.findAll();
+	channelWhitelist: ['791703686912016405'],
+	usage: '<Genre> | empty',
+	execute: async function(message, args) {
+
+		let movieList = [];
+
+		if (args.length) {
+			const movieGenreName = args[0];
+			const movieGenre = await Genre.findOne({ where: { name: movieGenreName } });
+
+			movieList = await Movie.findAll({
+				where: { genre_id: movieGenre.id },
+				include: ['genre'],
+			});
+		}
+		else {
+			movieList = await Movie.findAll({
+				include: ['genre'],
+			});
+		}
 
 		if (!movieList) return message.channel.send('Es gibt keine Filme.');
 
-		const sortby = movieList.reduce((groups, item) => {
-			const group = (groups[item.gerne] || []);
+		const sortBy = movieList.reduce((groups, item) => {
+			const group = (groups[item.genre_id] || []);
 			group.push(item);
-			groups[item.gerne] = group;
+			groups[item.genre_id] = group;
 			return groups;
 		}, {});
 
-		Object.values(sortby).forEach(element => {
+		Object.values(sortBy).forEach(element => {
 
-			let titlefield = '';
-			let plattformfield = '';
-			let gernefield = '';
+			let titleField = '';
+			let platformField = '';
+			let genre = '';
 
 			element.forEach(child => {
-				gernefield = child.gerne;
-				titlefield = titlefield + child.name + '\n';
-				plattformfield = plattformfield + child.plattform + '\n';
+				genre = child.genre;
+				titleField = titleField + child.name + '\n';
+				platformField = platformField + child.platform + '\n';
 			});
 
-			console.log(element);
-
 			const embed = new Discord.MessageEmbed()
-				.setTitle(gernefield)
-				.setColor(Math.floor(Math.random() * 16777215).toString(16))
+				.setTitle(genre.name)
+				.setColor(genre.color)
 				.addFields(
-					{ name: 'Title', value: titlefield, inline: true },
-					{ name: 'Plattform', value: plattformfield, inline: true },
+					{ name: 'Title', value: titleField, inline: true },
+					{ name: 'Platform', value: platformField, inline: true },
 				);
 			message.channel.send(embed);
 

@@ -38,6 +38,12 @@ client.on('message', async message => {
 		return message.reply('I can\'t execute that command inside DMs!');
 	}
 
+	if (command.channelWhitelist) {
+		if (!command.channelWhitelist.includes(message.channel.id)) {
+			return message.reply('Der Befehl ist in diesem Channel nicht erlaubt.');
+		}
+	}
+
 	if (command.permissions) {
 		const authorPerms = message.channel.permissionsFor(message.author);
 		if (!authorPerms || !authorPerms.has(command.permissions)) {

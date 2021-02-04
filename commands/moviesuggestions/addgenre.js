@@ -1,9 +1,10 @@
-const { Gerne } = require('../../dbObjects');
+const { Genre } = require('../../dbObjects');
 
 module.exports = {
-	name: 'addgerne',
+	name: 'addgenre',
 	description: 'Adds a movie gerne!',
 	category: 'moviesuggestions',
+	aliases: ['addg'],
 	args: true,
 	execute: async function(message, args) {
 
@@ -12,7 +13,7 @@ module.exports = {
 
 		try {
 			// equivalent to: INSERT INTO tags (name, descrption, username) values (?, ?, ?);
-			const movie = await Gerne.create({
+			const movie = await Genre.create({
 				name: movieName,
 				color: movieColor,
 			});

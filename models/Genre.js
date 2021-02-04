@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-	return sequelize.define('gerne', {
+	return sequelize.define('genre', {
 		name: {
 			type: DataTypes.STRING,
 			unique: true,
@@ -7,6 +7,9 @@ module.exports = (sequelize, DataTypes) => {
 		color: {
 			type: DataTypes.STRING,
 			unique: true,
+			allowNull: false,
 		},
+	}, {
+		timestamps: false,
 	});
 };
