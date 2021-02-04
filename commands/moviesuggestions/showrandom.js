@@ -22,7 +22,7 @@ module.exports = {
 		if (!movie) return message.channel.send('Es gibt keine Filme.');
 		const embed = new Discord.MessageEmbed()
 			// Set the title of the field
-			.setTitle('Film Vorschlag')
+			.setTitle('Filmvorschlag')
 			// Set the color of the embed
 			.setColor(movie.genre.color)
 			.addFields(
