@@ -5,6 +5,8 @@ module.exports = {
 	description: 'Adds a movie gerne!',
 	category: 'moviesuggestions',
 	aliases: ['addg'],
+	channelWhitelist: ['789139711829737522', '791703686912016405'],
+	roles: ['766633420713230336', '599906769589764097'],
 	args: true,
 	execute: async function(message, args) {
 

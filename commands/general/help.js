@@ -1,5 +1,5 @@
-//const { prefix } = require('../../config.json');
-const prefix = process.env.PREFIX;
+const { Settings } = require('../../dbObjects');
+let prefix = process.env.PREFIX;
 
 module.exports = {
 	name: 'help',
@@ -8,7 +8,14 @@ module.exports = {
 	aliases: ['commands'],
 	usage: '[command name]',
 	cooldown: 5,
-	execute(message, args) {
+	execute: async function(message, args) {
+		if (message.guild) {
+			const settings = await Settings.findOne({
+				where: { guild_id: message.guild.id },
+			});
+			prefix = settings.prefix;
+		}
+
 		const data = [];
 		const { commands } = message.client;
 
