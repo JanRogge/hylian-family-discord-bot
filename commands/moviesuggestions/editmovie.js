@@ -7,8 +7,8 @@ module.exports = {
 	aliases: ['edit'],
 	args: true,
 	execute: async function(message, args) {
-		const movieName = args[0];
-		const movieGenreName = args[1];
+		const movieName = args.slice(0, -1).join(' ');
+		const movieGenreName = args.slice(-1);
 		const movieGenre = await Genre.findOne({ where: { name: movieGenreName } });
 
 		if (!movieGenre) {

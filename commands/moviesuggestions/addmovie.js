@@ -6,21 +6,20 @@ module.exports = {
 	category: 'moviesuggestions',
 	usage: '<name> <genre> <platform>',
 	aliases: ['add'],
-	channelWhitelist: [791703686912016405],
+	channelWhitelist: ['791703686912016405'],
 	args: true,
 	execute: async function(message, args) {
 
-		const movieName = args[0].substring(1, args[0].length - 1);
-		const movieGenreName = args[1];
+		const movieName = args.slice(0, -2).join(' ');
+		const movieGenreName = args.slice(-2, -1).toString();
 		const movieGenre = await Genre.findOne({ where: { name: movieGenreName } });
-		const moviePlatform = args[2];
+		const moviePlatform = args.slice(-1).toString();
 
 		if (!movieGenre) {
 			return message.reply(`${movieGenreName} ist kein verfügbares Genre.`);
 		}
 
 		try {
-			// equivalent to: INSERT INTO tags (name, descrption, username) values (?, ?, ?);
 			const movie = await Movie.create({
 				name: movieName,
 				genre_id: movieGenre.id,

@@ -8,14 +8,13 @@ module.exports = {
 	args: true,
 	execute: async function(message, args) {
 
-		const movieName = args[0];
-		const movieColor = args[1];
+		const genreName = args[0];
+		const genreColor = args[1];
 
 		try {
-			// equivalent to: INSERT INTO tags (name, descrption, username) values (?, ?, ?);
 			const movie = await Genre.create({
-				name: movieName,
-				color: movieColor,
+				name: genreName,
+				color: genreColor,
 			});
 			return message.reply(`Gerne ${movie.name} wurde hinzugefügt.`);
 		}
