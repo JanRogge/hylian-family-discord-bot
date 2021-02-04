@@ -1,8 +1,10 @@
 const { User_bans } = require('../../dbObjects');
 
 module.exports = {
-	name: 'warn',
+	name: 'addwarning',
 	description: 'Warn a user!',
+	category: 'blacklist',
+	aliases: ['warn'],
 	args: true,
 	execute: async function(message, args) {
 

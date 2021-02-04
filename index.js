@@ -1,13 +1,17 @@
 require('dotenv').config();
 // const { prefix } = require('./config.json');
 const Discord = require('discord.js');
-// const Keyv = require('keyv');
-
-// const prefixes = new Keyv(process.env.DATABASE_URL);
 
 const prefix = process.env.PREFIX;
 
-const client = new Discord.Client();
+const client = new Discord.Client(
+	{
+		presence: {
+			activity: { name: 'VSCode', type: 'PLAYING' },
+			status: 'online',
+		},
+	},
+);
 
 client.commands = new Discord.Collection();
 const cooldowns = new Discord.Collection();
@@ -32,6 +36,12 @@ client.on('message', async message => {
 
 	if (command.guildOnly && message.channel.type === 'dm') {
 		return message.reply('I can\'t execute that command inside DMs!');
+	}
+
+	if (command.channelWhitelist) {
+		if (!command.channelWhitelist.includes(message.channel.id)) {
+			return message.reply('Der Befehl ist in diesem Channel nicht erlaubt.');
+		}
 	}
 
 	if (command.permissions) {
@@ -73,7 +83,8 @@ client.on('message', async message => {
 
 	try {
 		command.execute(message, args);
-	} catch (error) {
+	}
+	catch (error) {
 		console.error(error);
 		message.reply('there was an error trying to execute that command!');
 	}

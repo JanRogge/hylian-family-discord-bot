@@ -4,8 +4,10 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.STRING,
 			unique: true,
 		},
-		gerne: DataTypes.STRING,
-		plattform: DataTypes.STRING,
+		genre_id: DataTypes.INTEGER,
+		platform: DataTypes.STRING,
 		username: DataTypes.STRING,
+	}, {
+		timestamps: false,
 	});
 };
