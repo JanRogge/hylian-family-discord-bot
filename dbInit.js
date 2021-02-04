@@ -1,6 +1,8 @@
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize(process.env.DATABASE_URL);
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+	logging: false,
+});
 
 const Movie = require('./models/Movies')(sequelize, Sequelize.DataTypes);
 const Gerne = require('./models/Gerne')(sequelize, Sequelize.DataTypes);

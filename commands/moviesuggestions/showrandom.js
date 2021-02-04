@@ -2,8 +2,10 @@ const Discord = require('discord.js');
 const { Movie } = require('../../dbObjects');
 
 module.exports = {
-	name: 'random',
+	name: 'showrandom',
 	description: 'Show random Movie!',
+	category: 'moviesuggestions',
+	aliases: ['random'],
 	args: false,
 	execute: async function(message) {
 		const movieList = await Movie.findAll();

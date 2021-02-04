@@ -2,8 +2,10 @@ const { Movie } = require('../../dbObjects');
 const Discord = require('discord.js');
 
 module.exports = {
-	name: 'show',
+	name: 'showmovies',
 	description: 'Show all Movie!',
+	category: 'moviesuggestions',
+	aliases: ['show', 'showAll'],
 	args: false,
 	execute: async function(message) {
 		const movieList = await Movie.findAll();
@@ -28,6 +30,8 @@ module.exports = {
 				titlefield = titlefield + child.name + '\n';
 				plattformfield = plattformfield + child.plattform + '\n';
 			});
+
+			console.log(element);
 
 			const embed = new Discord.MessageEmbed()
 				.setTitle(gernefield)

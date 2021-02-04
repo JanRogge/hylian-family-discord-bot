@@ -1,8 +1,9 @@
 const { Gerne } = require('../../dbObjects');
 
 module.exports = {
-	name: 'add-gerne',
+	name: 'addgerne',
 	description: 'Adds a movie gerne!',
+	category: 'moviesuggestions',
 	args: true,
 	execute: async function(message, args) {
 

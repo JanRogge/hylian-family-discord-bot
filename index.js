@@ -1,13 +1,17 @@
 require('dotenv').config();
 // const { prefix } = require('./config.json');
 const Discord = require('discord.js');
-// const Keyv = require('keyv');
-
-// const prefixes = new Keyv(process.env.DATABASE_URL);
 
 const prefix = process.env.PREFIX;
 
-const client = new Discord.Client();
+const client = new Discord.Client(
+	{
+		presence: {
+			activity: { name: 'VSCode', type: 'PLAYING' },
+			status: 'online',
+		},
+	},
+);
 
 client.commands = new Discord.Collection();
 const cooldowns = new Discord.Collection();
@@ -73,7 +77,8 @@ client.on('message', async message => {
 
 	try {
 		command.execute(message, args);
-	} catch (error) {
+	}
+	catch (error) {
 		console.error(error);
 		message.reply('there was an error trying to execute that command!');
 	}

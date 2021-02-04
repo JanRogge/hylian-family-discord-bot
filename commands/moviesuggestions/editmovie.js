@@ -1,8 +1,10 @@
 const { Movie } = require('../../dbObjects');
 
 module.exports = {
-	name: 'edit',
+	name: 'editmovie',
 	description: 'Edit Movie!',
+	category: 'moviesuggestions',
+	aliases: ['edit'],
 	args: true,
 	execute: async function(message, args) {
 		const movieName = args[0];
