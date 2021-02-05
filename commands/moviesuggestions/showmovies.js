@@ -29,7 +29,7 @@ module.exports = {
 			});
 		}
 
-		if (!movieList) return message.channel.send('Es gibt keine Filme.');
+		if (!movieList.length) return message.channel.send('Es gibt keine Filme.');
 
 		const sortBy = movieList.reduce((groups, item) => {
 			const group = (groups[item.genre_id] || []);

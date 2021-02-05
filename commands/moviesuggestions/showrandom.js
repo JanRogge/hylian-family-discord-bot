@@ -20,8 +20,8 @@ module.exports = {
 			movieCollection.set(movie.id, movie);
 		});
 		const movie = movieCollection.random();
-		const user = await message.client.users.fetch(movie.user_id);
 		if (!movie) return message.channel.send('Es gibt keine Filme.');
+		const user = await message.client.users.fetch(movie.user_id);
 		const embed = new Discord.MessageEmbed()
 			.setTitle('Filmvorschlag')
 			.setColor(movie.genre.color)

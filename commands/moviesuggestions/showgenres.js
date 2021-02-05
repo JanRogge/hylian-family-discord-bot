@@ -11,6 +11,9 @@ module.exports = {
 	execute: async function(message) {
 
 		const genres = await Genre.findAll({ where: { guild_id: message.guild.id } });
+
+		if (!genres.length) return message.channel.send('Es gibt keine Genres.');
+
 		let genreField = '';
 
 		genres.forEach(child => {
