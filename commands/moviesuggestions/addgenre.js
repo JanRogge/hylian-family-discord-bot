@@ -17,6 +17,7 @@ module.exports = {
 			const movie = await Genre.create({
 				name: genreName,
 				color: genreColor,
+				guild_id: message.guild.id,
 			});
 			return message.reply(`Gerne ${movie.name} wurde hinzugefügt.`);
 		}

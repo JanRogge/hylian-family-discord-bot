@@ -11,7 +11,7 @@ module.exports = {
 	execute: async function(message, args) {
 		const genreName = args[0];
 
-		const rowCount = await Genre.destroy({ where: { name: genreName } });
+		const rowCount = await Genre.destroy({ where: { name: genreName, guild_id: message.guild.id } });
 		if (!rowCount) return message.reply('That genre did not exist.');
 
 		return message.reply('Genre deleted.');

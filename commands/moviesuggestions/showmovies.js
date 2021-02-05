@@ -15,7 +15,7 @@ module.exports = {
 
 		if (args.length) {
 			const movieGenreName = args[0];
-			const movieGenre = await Genre.findOne({ where: { name: movieGenreName } });
+			const movieGenre = await Genre.findOne({ where: { name: movieGenreName, guild_id: message.guild.id } });
 
 			movieList = await Movie.findAll({
 				where: { genre_id: movieGenre.id, guild_id: message.guild.id },

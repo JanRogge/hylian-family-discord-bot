@@ -13,7 +13,7 @@ module.exports = {
 		const genreColor = args[0];
 
 		// equivalent to: UPDATE tags (descrption) values (?) WHERE name = ?;
-		const affectedRows = await Genre.update({ color: genreColor }, { where: { name: genreName } });
+		const affectedRows = await Genre.update({ color: genreColor }, { where: { name: genreName, guild_id: message.guild.id } });
 		if (affectedRows > 0) {
 			return message.reply(`Genre ${genreName} was edited.`);
 		}

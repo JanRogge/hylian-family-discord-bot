@@ -11,7 +11,7 @@ module.exports = {
 	execute: async function(message, args) {
 		const movieName = args.join(' ');
 
-		const rowCount = await Movie.destroy({ where: { name: movieName } });
+		const rowCount = await Movie.destroy({ where: { name: movieName, guild_id: message.guild.id } });
 		if (!rowCount) return message.reply('That movie did not exist.');
 
 		return message.reply('Movie deleted.');

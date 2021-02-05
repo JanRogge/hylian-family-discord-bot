@@ -14,7 +14,7 @@ module.exports = {
 
 		const movieName = args.slice(0, -3).join(' ');
 		const movieGenreName = args.slice(-3, -2).toString();
-		const movieGenre = await Genre.findOne({ where: { name: movieGenreName } });
+		const movieGenre = await Genre.findOne({ where: { name: movieGenreName, guild_id: message.guild.id } });
 		const moviePlatform = args.slice(-2, -1).toString();
 		const movieTrailer = args.slice(-1).toString();
 

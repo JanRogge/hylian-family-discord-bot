@@ -11,14 +11,14 @@ module.exports = {
 	execute: async function(message, args) {
 		const movieName = args.slice(0, -1).join(' ');
 		const movieGenreName = args.slice(-1);
-		const movieGenre = await Genre.findOne({ where: { name: movieGenreName } });
+		const movieGenre = await Genre.findOne({ where: { name: movieGenreName, guild_id: message.guild.id } });
 
 		if (!movieGenre) {
 			return message.reply(`${movieGenreName} ist kein verfügbares Genre.`);
 		}
 
 		// equivalent to: UPDATE tags (descrption) values (?) WHERE name = ?;
-		const affectedRows = await Movie.update({ genre_id: movieGenre.id }, { where: { name: movieName } });
+		const affectedRows = await Movie.update({ genre_id: movieGenre.id }, { where: { name: movieName, guild_id: message.guild.id } });
 		if (affectedRows > 0) {
 			return message.reply(`Movie ${movieName} was edited.`);
 		}
