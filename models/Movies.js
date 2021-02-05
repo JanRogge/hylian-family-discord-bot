@@ -6,7 +6,9 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		genre_id: DataTypes.INTEGER,
 		platform: DataTypes.STRING,
-		username: DataTypes.STRING,
+		user_id: DataTypes.STRING,
+		trailer: DataTypes.STRING,
+		guild_id: DataTypes.STRING,
 	}, {
 		timestamps: false,
 	});

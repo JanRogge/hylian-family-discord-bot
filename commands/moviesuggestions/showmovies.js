@@ -18,12 +18,13 @@ module.exports = {
 			const movieGenre = await Genre.findOne({ where: { name: movieGenreName } });
 
 			movieList = await Movie.findAll({
-				where: { genre_id: movieGenre.id },
+				where: { genre_id: movieGenre.id, guild_id: message.guild.id },
 				include: ['genre'],
 			});
 		}
 		else {
 			movieList = await Movie.findAll({
+				where: { guild_id: message.guild.id },
 				include: ['genre'],
 			});
 		}
@@ -42,11 +43,13 @@ module.exports = {
 			let titleField = '';
 			let platformField = '';
 			let genre = '';
+			let trailer = '';
 
 			element.forEach(child => {
 				genre = child.genre;
 				titleField = titleField + child.name + '\n';
 				platformField = platformField + child.platform + '\n';
+				trailer = trailer + `[Trailer]( ${child.trailer})` + '\n';
 			});
 
 			const embed = new Discord.MessageEmbed()
@@ -55,6 +58,7 @@ module.exports = {
 				.addFields(
 					{ name: 'Title', value: titleField, inline: true },
 					{ name: 'Platform', value: platformField, inline: true },
+					{ name: 'Trailer', value: trailer, inline: true },
 				);
 			message.channel.send(embed);
 
