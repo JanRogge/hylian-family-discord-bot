@@ -1,6 +1,6 @@
 require('dotenv').config();
 const Discord = require('discord.js');
-const { Settings } = require('./dbObjects');
+const { Settings, Movie, Genre } = require('./dbObjects');
 
 const client = new Discord.Client(
 	{
@@ -34,6 +34,8 @@ client.on('guildCreate', async guild => {
 
 client.on('guildDelete', async guild => {
 	await Settings.destroy({ where: { guild_id: guild.id } });
+	await Movie.destroy({ where: { guild_id: guild.id } });
+	await Genre.destroy({ where: { guild_id: guild.id } });
 });
 
 client.on('message', async message => {
