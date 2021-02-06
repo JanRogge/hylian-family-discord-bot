@@ -12,6 +12,7 @@ module.exports = {
 	args: false,
 	execute: async function(message) {
 		const movieList = await Movie.findAll({
+			where: { guild_id: message.guild.id },
 			include: ['genre'],
 		});
 		const movieCollection = new Discord.Collection();
@@ -20,18 +21,17 @@ module.exports = {
 		});
 		const movie = movieCollection.random();
 		if (!movie) return message.channel.send('Es gibt keine Filme.');
+		const user = await message.client.users.fetch(movie.user_id);
 		const embed = new Discord.MessageEmbed()
-			// Set the title of the field
 			.setTitle('Filmvorschlag')
-			// Set the color of the embed
 			.setColor(movie.genre.color)
 			.addFields(
 				{ name: 'Title', value: movie.name, inline: true },
 				{ name: 'Genre', value: movie.genre.name, inline: true },
 				{ name: 'Platform', value: movie.platform, inline: true },
-				{ name: 'Vorschlag von', value: movie.username },
+				{ name: 'Trailer', value: movie.trailer },
+				{ name: 'Vorschlag von', value:  user },
 			);
-		// Send the embed to the same channel as the message
 		return message.channel.send(embed);
 	},
 };

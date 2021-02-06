@@ -4,6 +4,7 @@ module.exports = {
 	name: 'editgenre',
 	description: 'Edit Genre!',
 	category: 'moviesuggestions',
+	usage: '<name>',
 	aliases: ['editg'],
 	channelWhitelist: ['789139711829737522', '791703686912016405'],
 	roles: ['766633420713230336', '599906769589764097'],
@@ -13,7 +14,7 @@ module.exports = {
 		const genreColor = args[0];
 
 		// equivalent to: UPDATE tags (descrption) values (?) WHERE name = ?;
-		const affectedRows = await Genre.update({ color: genreColor }, { where: { name: genreName } });
+		const affectedRows = await Genre.update({ color: genreColor }, { where: { name: genreName, guild_id: message.guild.id } });
 		if (affectedRows > 0) {
 			return message.reply(`Genre ${genreName} was edited.`);
 		}
