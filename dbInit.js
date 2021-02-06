@@ -12,8 +12,9 @@ const Genre = require('./models/Genre')(sequelize, Sequelize.DataTypes);
 const Settings = require('./models/Settings')(sequelize, Sequelize.DataTypes);
 
 const force = process.argv.includes('--force') || process.argv.includes('-f');
+const alter = process.argv.includes('--alter') || process.argv.includes('-a');
 
-sequelize.sync({ force }).then(async () => {
+sequelize.sync({ force, alter }).then(async () => {
 	const movies = [
 		Movie.upsert({ name: 'Film1', genre_id: 1, platform: 'hey' }),
 		Movie.upsert({ name: 'Film2', genre_id: 1, platform: 'hey' }),
