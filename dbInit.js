@@ -10,6 +10,7 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
 const Movie = require('./models/Movies')(sequelize, Sequelize.DataTypes);
 const Genre = require('./models/Genre')(sequelize, Sequelize.DataTypes);
 const Settings = require('./models/Settings')(sequelize, Sequelize.DataTypes);
+const VoiceRoleLink = require('./models/VoiceRoleLink')(sequelize, Sequelize.DataTypes);
 
 const force = process.argv.includes('--force') || process.argv.includes('-f');
 const alter = process.argv.includes('--alter') || process.argv.includes('-a');
