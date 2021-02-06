@@ -2,14 +2,14 @@ const { Movie, Genre } = require('../../dbObjects');
 
 module.exports = {
 	name: 'addmovie',
-	description: 'Add Movie!',
 	category: 'moviesuggestions',
-	usage: '<name> <genre> <platform>',
+	description: 'Add Movie!',
 	aliases: ['add'],
+	guildOnly: true,
+	args: true,
+	usage: '<name> <genre> <platform> <trailerURL>',
 	channelWhitelist: ['789139711829737522', '791703686912016405'],
 	roles: ['766633420713230336', '599906769589764097'],
-	args: true,
-	guildOnly: true,
 	execute: async function(message, args) {
 
 		const movieName = args.slice(0, -3).join(' ');

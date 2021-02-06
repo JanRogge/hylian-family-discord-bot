@@ -4,6 +4,7 @@ module.exports = {
 	name: 'editgenre',
 	description: 'Edit Genre!',
 	category: 'moviesuggestions',
+	usage: '<name>',
 	aliases: ['editg'],
 	channelWhitelist: ['789139711829737522', '791703686912016405'],
 	roles: ['766633420713230336', '599906769589764097'],

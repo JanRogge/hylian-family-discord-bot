@@ -4,6 +4,7 @@ module.exports = {
 	name: 'deletemovie',
 	description: 'Delete Movie!',
 	category: 'moviesuggestions',
+	usage: '<name>',
 	aliases: ['delete'],
 	channelWhitelist: ['789139711829737522', '791703686912016405'],
 	roles: ['766633420713230336', '599906769589764097'],
