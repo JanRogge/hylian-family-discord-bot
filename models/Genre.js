@@ -1,5 +1,9 @@
 module.exports = (sequelize, DataTypes) => {
 	return sequelize.define('genre', {
+		guild_id: {
+			type: DataTypes.STRING,
+			unique: 'genreComposite',
+		},
 		name: {
 			type: DataTypes.STRING,
 			unique: 'genreComposite',
@@ -8,10 +12,6 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.STRING,
 			unique: 'genreComposite',
 			allowNull: false,
-		},
-		guild_id: {
-			type: DataTypes.STRING,
-			unique: 'genreComposite',
 		},
 	}, {
 		timestamps: false,

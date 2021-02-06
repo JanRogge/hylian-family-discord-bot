@@ -1,5 +1,9 @@
 module.exports = (sequelize, DataTypes) => {
 	return sequelize.define('movies', {
+		guild_id: {
+			type: DataTypes.STRING,
+			unique: 'movieComposite',
+		},
 		name: {
 			type: DataTypes.STRING,
 			unique: 'movieComposite',
@@ -8,10 +12,6 @@ module.exports = (sequelize, DataTypes) => {
 		platform: DataTypes.STRING,
 		user_id: DataTypes.STRING,
 		trailer: DataTypes.STRING,
-		guild_id: {
-			type: DataTypes.STRING,
-			unique: 'movieComposite',
-		},
 	}, {
 		timestamps: false,
 	});
