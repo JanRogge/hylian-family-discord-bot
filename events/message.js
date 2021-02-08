@@ -4,6 +4,21 @@ const Discord = require('discord.js');
 const cooldowns = new Discord.Collection();
 
 module.exports = async (client, message) => {
+
+	// 807568520996454431
+	if (message.channel.id === '791703686912016405') {
+		let messageContent = message.content;
+		if (message.activity) {
+			messageContent = message.activity.partyID;
+		}
+
+		const membersOfRole = message.guild.roles.resolve('807568520996454431').members;
+
+		membersOfRole.forEach(member => {
+			member.send(messageContent);
+		});
+	}
+
 	let prefix;
 	if (message.guild) {
 		const settings = await Settings.findOne({
