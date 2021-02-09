@@ -6,10 +6,13 @@ module.exports = async (client, oldState, newState) => {
 			where: { guild_id: newState.guild.id },
 		});
 
+		console.log(settings);
+
 		const addedRoles = newState.roles.cache.filter(role => !oldState.roles.cache.has(role.id));
 
 		// Send Message if Live Role was added
 		if (addedRoles.some(role => role.id === settings.live_role_id)) {
+			console.log('here');
 			const codeChannel = newState.guild.channels.resolve(settings.code_channel_id);
 			const messages = await codeChannel.messages.fetch({ limit: 1 });
 
@@ -18,8 +21,12 @@ module.exports = async (client, oldState, newState) => {
 				messageContent = messages.first().activity.partyID;
 			}
 
+			console.log(messageContent);
+
 			// Dont send author his message via DM
 			if (newState.id === messages.first().author.id) return;
+
+			console.log(messageContent);
 
 			// Done send blacklisted roles the message via DM
 			const blacklistedIds = settings.code_blacklist_roles_id.split(',');
@@ -27,7 +34,10 @@ module.exports = async (client, oldState, newState) => {
 			blacklistedIds.forEach(blacklistedId => {
 				blacklisted = newState.roles.cache.some(role => role.id === blacklistedId);
 			});
+			console.log(blacklisted);
 			if (blacklisted) return;
+
+			console.log('heyho');
 
 			newState.send(`Der letzte Gamecode/Invitelink ist: ${messageContent}`);
 
