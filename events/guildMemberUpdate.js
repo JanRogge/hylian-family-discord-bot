@@ -18,7 +18,16 @@ module.exports = async (client, oldState, newState) => {
 				messageContent = messages.first().activity.partyID;
 			}
 
+			// Dont send author his message via DM
 			if (newState.id === messages.first().author.id) return;
+
+			// Done send blacklisted roles the message via DM
+			const blacklistedIds = settings.code_blacklist_roles_id.split(',');
+			let blacklisted = false;
+			blacklistedIds.forEach(blacklistedId => {
+				blacklisted = newState.roles.cache.some(role => role.id === blacklistedId);
+			});
+			if (blacklisted) return;
 
 			newState.send(`Der letzte Gamecode/Invitelink ist: ${messageContent}`);
 

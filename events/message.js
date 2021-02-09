@@ -28,7 +28,15 @@ module.exports = async (client, message) => {
 
 		const membersOfRole = message.guild.roles.cache.get(settings.live_role_id).members;
 
-		const membersWithOutAuthor = membersOfRole.filter(member => member.id !== message.author.id);
+		const membersWithOutAuthor = membersOfRole.filter(member => {
+			const blacklistedIds = settings.code_blacklist_roles_id.split(',');
+			let blacklisted = false;
+			blacklistedIds.forEach(blacklistedId => {
+				blacklisted = member.roles.cache.some(role => role.id === blacklistedId);
+			});
+
+			return member.id !== message.author.id || !blacklisted;
+		});
 
 		membersWithOutAuthor.forEach(member => {
 			member.send(`Der Gamecode/Invitelink ist: ${messageContent}`);
