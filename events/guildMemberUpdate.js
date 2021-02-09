@@ -29,7 +29,7 @@ module.exports = async (client, oldState, newState) => {
 			});
 			if (blacklisted) return;
 
-			newState.send(`Der letzte Gamecode/Invitelink ist: ${messageContent}`);
+			newState.send(`Der letzte Gamecode/Invitelink vom ${messages.first().createdAt.toLocaleString('de-DE')} ist: ${messageContent}`);
 
 		}
 	}
