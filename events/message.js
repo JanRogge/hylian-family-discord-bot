@@ -4,18 +4,39 @@ const Discord = require('discord.js');
 const cooldowns = new Discord.Collection();
 
 module.exports = async (client, message) => {
-	let prefix;
+
+	// Load Settings if in a guild
+	let settings;
 	if (message.guild) {
-		const settings = await Settings.findOne({
+		settings = await Settings.findOne({
 			where: { guild_id: message.guild.id },
 		});
-		prefix = settings.prefix;
-	}
-	else {
-		prefix = process.env.PREFIX;
 	}
 
-	if (!message.content.startsWith(prefix) || message.author.bot) return;
+	const prefix = settings ? settings.prefix : process.env.PREFIX;
+
+	// Ignore Bot Messages
+	if (message.author.bot) return;
+
+	// Handel Code Channel
+	if (message.guild && message.channel.id === settings.code_channel_id) {
+
+		let messageContent = message.content;
+		if (message.activity) {
+			messageContent = message.activity.partyID;
+		}
+
+		const membersOfRole = message.guild.roles.cache.get(settings.live_role_id).members;
+
+		const membersWithOutAuthor = membersOfRole.filter(member => member.id !== message.author.id);
+
+		membersWithOutAuthor.forEach(member => {
+			member.send(`Der Gamecode/Invitelink ist: ${messageContent}`);
+		});
+	}
+
+	// Ignore non Commands
+	if (!message.content.startsWith(prefix)) return;
 
 	const args = message.content.slice(prefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();

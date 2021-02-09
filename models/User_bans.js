@@ -1,12 +1,16 @@
 module.exports = (sequelize, DataTypes) => {
 	return sequelize.define('user_ban', {
-		discordId: {
+		guild_id: {
 			type: DataTypes.STRING,
-			unique: true,
+			unique: 'blacklistComposite',
 		},
-		moderator: DataTypes.STRING,
+		user_id: {
+			type: DataTypes.STRING,
+			unique: 'blacklistComposite',
+		},
+		moderator_id: DataTypes.STRING,
 		reason: DataTypes.TEXT,
 		type: DataTypes.STRING,
-		alts: DataTypes.TEXT,
+		alt_ids: DataTypes.TEXT,
 	});
 };
