@@ -10,6 +10,8 @@ module.exports = (sequelize, DataTypes) => {
 			unique: true,
 		},
 		prefix: DataTypes.STRING,
+		code_channel_id: DataTypes.STRING,
+		live_role_id: DataTypes.STRING,
 	}, {
 		timestamps: false,
 	});

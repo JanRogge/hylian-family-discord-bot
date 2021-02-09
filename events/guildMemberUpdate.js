@@ -1,11 +1,27 @@
+const { Settings } = require('../dbObjects');
+
 module.exports = async (client, oldState, newState) => {
-	const addedRoles = newState.roles.cache.filter(role => !oldState.roles.cache.has(role.id));
+	if(newState.guild) {
+		const settings = await Settings.findOne({
+			where: { guild_id: newState.guild.id },
+		});
 
-	if (addedRoles.some(role => role.id === '807568520996454431')) {
-		const channel = newState.guild.channels.resolve('791703686912016405');
-		const messages = await channel.messages.fetch({ limit: 1 });
+		const addedRoles = newState.roles.cache.filter(role => !oldState.roles.cache.has(role.id));
 
-		newState.send(messages.first().content);
+		// Send Message if Live Role was added
+		if (addedRoles.some(role => role.id === settings.live_role_id)) {
+			const codeChannel = newState.guild.channels.resolve(settings.code_channel_id);
+			const messages = await codeChannel.messages.fetch({ limit: 1 });
 
+			let messageContent = messages.first().content;
+			if (messages.first().activity) {
+				messageContent = messages.first().activity.partyID;
+			}
+
+			if (newState.id === messages.first().author.id) return;
+
+			newState.send(`Der letzte Gamecode/Invitelink ist: ${messageContent}`);
+
+		}
 	}
 };
