@@ -18,9 +18,9 @@ module.exports = {
 
 			const affectedRows = await VoiceRoleLink.update({ role_ids: roleString }, { where: { guild_id: message.guild.id, voice_channel_id: message.member.voice.channelID } });
 			if (affectedRows > 0) {
-				return message.reply(`Genre ${message.member.voice.channelID} was edited.`);
+				return message.reply(`Voicelink for channel ${message.member.voice.channelID} was edited. Roles are now ${roleString}.`);
 			}
-			return message.reply('Fehler beim updaten');
+			return message.reply('Error while trying to update voicelink!');
 		}
 
 		try {
@@ -29,13 +29,13 @@ module.exports = {
 				voice_channel_id: message.member.voice.channelID,
 				role_ids: message.mentions.roles.first().id,
 			});
-			return message.reply(`Gerne ${voicerolelink.voice_channel_id} wurde hinzugefügt.`);
+			return message.reply(`Voicelink was added to channel ${voicerolelink.voice_channel_id} with the role ${message.mentions.roles.first().id}`);
 		}
 		catch (e) {
 			if (e.name === 'SequelizeUniqueConstraintError') {
-				return message.reply('Der Gerne oder Farbe exsisiert bereits.');
+				return message.reply('There is already a voicelink for this channel!');
 			}
-			return message.reply('Es gabe beim hinzufügen einen Fehler.');
+			return message.reply('There was an error trying to add the voicelink!');
 		}
 	},
 };

@@ -18,17 +18,17 @@ module.exports = {
 
 			if (roleArray.length === 1) {
 				const rowCount = await VoiceRoleLink.destroy({ where: { guild_id: message.guild.id, voice_channel_id: message.member.voice.channelID } });
-				if (!rowCount) return message.reply('That movie did not exist.');
-				return message.reply('Movie deleted.');
+				if (!rowCount) return message.reply('There is now Voicelink for the current channel!');
+				return message.reply(`Voicelink for channel ${message.member.voice.channelID} was deleted.`);
 			}
 
 			const roleString = roleArray.filter(roleID => roleID !== message.mentions.roles.first().id).join();
 
 			const affectedRows = await VoiceRoleLink.update({ role_ids: roleString }, { where: { guild_id: message.guild.id, voice_channel_id: message.member.voice.channelID } });
 			if (affectedRows > 0) {
-				return message.reply(`Genre ${message.member.voice.channelID} was edited.`);
+				return message.reply(`Voicelink for channel ${message.member.voice.channelID} was edited. Roles are now ${roleString}.`);
 			}
-			return message.reply('Fehler beim updaten');
+			return message.reply('Error while trying to update voicelink!');
 		}
 	},
 };
