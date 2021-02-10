@@ -1,5 +1,6 @@
 const { Settings } = require('../dbObjects');
 const Discord = require('discord.js');
+const { messageHandling } = require('../components/codeSharing');
 
 const cooldowns = new Discord.Collection();
 
@@ -18,34 +19,13 @@ module.exports = async (client, message) => {
 	// Ignore Bot Messages
 	if (message.author.bot) return;
 
-	// Handel Code Channel
-	if (message.guild && message.channel.id === settings.code_channel_id) {
-
-		let messageContent = message.content;
-		if (message.activity) {
-			messageContent = message.activity.partyID;
-		}
-
-		const membersOfRole = message.guild.roles.cache.get(settings.live_role_id).members;
-
-		const membersWithOutAuthor = membersOfRole.filter(member => {
-			const blacklistedIds = settings.code_blacklist_roles_id.split(',');
-			let blacklisted = false;
-			blacklistedIds.forEach(blacklistedId => {
-				blacklisted = member.roles.cache.some(role => role.id === blacklistedId);
-			});
-
-			return !blacklisted && member.id !== message.author.id ;
-		});
-
-		membersWithOutAuthor.forEach(member => {
-			member.send(`Der Gamecode/Invitelink ist: ${messageContent}`);
-		});
-	}
+	// Handel code Sharing for codes Channel
+	messageHandling(message, settings);
 
 	// Ignore non Commands
 	if (!message.content.startsWith(prefix)) return;
 
+	// Start handling commands
 	const args = message.content.slice(prefix.length).trim().split(/ +/);
 	const commandName = args.shift().toLowerCase();
 
