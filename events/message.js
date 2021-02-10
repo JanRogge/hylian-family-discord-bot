@@ -26,16 +26,16 @@ module.exports = async (client, message) => {
 			messageContent = message.activity.partyID;
 		}
 
-		const membersOfRole = message.guild.roles.cache.get(settings.live_role_id).members;
+		const membersOfLiveChannel = message.guild.channels.cache.get(settings.live_role_id).members;
 
-		const membersWithOutAuthor = membersOfRole.filter(member => {
+		const membersWithOutAuthor = membersOfLiveChannel.filter(member => {
 			const blacklistedIds = settings.code_blacklist_roles_id.split(',');
 			let blacklisted = false;
 			blacklistedIds.forEach(blacklistedId => {
 				blacklisted = member.roles.cache.some(role => role.id === blacklistedId);
 			});
 
-			return member.id !== message.author.id || !blacklisted;
+			return !blacklisted && member.id !== message.author.id ;
 		});
 
 		membersWithOutAuthor.forEach(member => {

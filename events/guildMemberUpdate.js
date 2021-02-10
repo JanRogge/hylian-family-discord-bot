@@ -1,6 +1,7 @@
 const { Settings } = require('../dbObjects');
 
 module.exports = async (client, oldState, newState) => {
+	return;
 	if(newState.guild) {
 		const settings = await Settings.findOne({
 			where: { guild_id: newState.guild.id },
@@ -8,8 +9,13 @@ module.exports = async (client, oldState, newState) => {
 
 		const addedRoles = newState.roles.cache.filter(role => !oldState.roles.cache.has(role.id));
 
+		if (addedRoles.size === 0) return;
+
 		// Send Message if Live Role was added
 		if (addedRoles.some(role => role.id === settings.live_role_id)) {
+			console.log('Live added');
+			console.log(addedRoles);
+			console.log(newState.roles.cache);
 			const codeChannel = newState.guild.channels.resolve(settings.code_channel_id);
 			const messages = await codeChannel.messages.fetch({ limit: 1 });
 
