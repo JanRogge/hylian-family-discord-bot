@@ -1,7 +1,6 @@
 const { Settings } = require('../dbObjects');
 
 module.exports = async (client, oldState, newState) => {
-	return;
 	if(newState.guild) {
 		const settings = await Settings.findOne({
 			where: { guild_id: newState.guild.id },

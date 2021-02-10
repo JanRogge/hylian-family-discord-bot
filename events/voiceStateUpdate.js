@@ -5,11 +5,12 @@ module.exports = async (client, oldState, newState) => {
 	if (oldState.channelID === newState.channelID) return;
 
 	if (newState.guild) {
-		const settings = await Settings.findOne({
+		/* const settings = await Settings.findOne({
 			where: { guild_id: newState.guild.id },
 		});
 
-		if (newState.channelID === settings.live_role_id) {
+		 if (newState.channelID === settings.live_voice_channel_id) {
+			console.log(settings.live_voice_channel_id);
 			const codeChannel = newState.guild.channels.resolve(settings.code_channel_id);
 			const messages = await codeChannel.messages.fetch({ limit: 1 });
 
@@ -30,7 +31,7 @@ module.exports = async (client, oldState, newState) => {
 			if (blacklisted) return;
 
 			newState.member.send(`Der letzte Gamecode/Invitelink vom ${messages.first().createdAt.toLocaleString('de-DE')} ist: ${messageContent}`);
-		}
+		} */
 
 		const voiceRolesAdd = await VoiceRoleLink.findOne({ where: { guild_id: newState.guild.id, voice_channel_id: newState.channelID } });
 		const voiceRolesRemove = await VoiceRoleLink.findOne({ where: { guild_id: oldState.guild.id, voice_channel_id: oldState.channelID } });

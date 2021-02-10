@@ -26,9 +26,9 @@ module.exports = async (client, message) => {
 			messageContent = message.activity.partyID;
 		}
 
-		const membersOfLiveChannel = message.guild.channels.cache.get(settings.live_role_id).members;
+		const membersOfRole = message.guild.roles.cache.get(settings.live_role_id).members;
 
-		const membersWithOutAuthor = membersOfLiveChannel.filter(member => {
+		const membersWithOutAuthor = membersOfRole.filter(member => {
 			const blacklistedIds = settings.code_blacklist_roles_id.split(',');
 			let blacklisted = false;
 			blacklistedIds.forEach(blacklistedId => {
