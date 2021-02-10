@@ -12,9 +12,6 @@ module.exports = async (client, oldState, newState) => {
 
 		// Send Message if Live Role was added
 		if (addedRoles.some(role => role.id === settings.live_role_id)) {
-			console.log('Live added');
-			console.log(addedRoles);
-			console.log(newState.roles.cache);
 			const codeChannel = newState.guild.channels.resolve(settings.code_channel_id);
 			const messages = await codeChannel.messages.fetch({ limit: 1 });
 
@@ -34,7 +31,18 @@ module.exports = async (client, oldState, newState) => {
 			});
 			if (blacklisted) return;
 
-			newState.send(`Der letzte Gamecode/Invitelink vom ${messages.first().createdAt.toLocaleString('de-DE')} ist: ${messageContent}`);
+			const dmChannel = await newState.user.createDM();
+
+			const dmMessages = dmChannel.messages;
+
+			const message = await dmMessages.fetch(dmMessages.channel.lastMessageID);
+
+			const lastMessageContent = message.content;
+			const newMessageContent = `Der letzte Gamecode/Invitelink vom ${messages.first().createdAt.toLocaleString('de-DE')} ist: ${messageContent}`;
+
+			if (lastMessageContent === newMessageContent) return;
+
+			dmChannel.send(newMessageContent);
 
 		}
 	}
