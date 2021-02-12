@@ -21,6 +21,7 @@ module.exports = {
 			});
 
 			membersWithOutAuthor.forEach(member => {
+				console.log(`Nachricht an ${member.displayName} (${member.user.tag}) gesendet via message`);
 				member.send(`Der Gamecode/Invitelink ist: ${messageContent}`);
 			});
 		}
@@ -62,6 +63,7 @@ module.exports = {
 			if (lastMessageContent === newMessageContent) return;
 
 			dmChannel.send(newMessageContent);
+			console.log(`Nachricht an ${newState.displayName} (${newState.user.tag}) gesendet via update`);
 
 		}
 	},
@@ -88,6 +90,7 @@ module.exports = {
 			});
 			if (blacklisted) return;
 
+			console.log(`Nachricht an ${newState.member.displayName} (${newState.member.user.tag}) gesendet via voiceUpdate`);
 			newState.member.send(`Der letzte Gamecode/Invitelink vom ${messages.first().createdAt.toLocaleString('de-DE')} ist: ${messageContent}`);
 		}
 	},
