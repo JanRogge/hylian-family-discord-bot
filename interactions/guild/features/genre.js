@@ -75,6 +75,23 @@ module.exports = {
 			permissions: true,
 		},
 	],
+	disable: async function(interaction) {
+		await Genre.destroy({ where: { guild_id: interaction.guild.id } });
+		const globalCommands = await interaction.guild.commands.fetch();
+		const command = globalCommands.find(cmd => cmd.name === this.name);
+
+		await interaction.client.guilds.cache.get(interaction.guild.id).commands.delete(command.id);
+	},
+	enable: async function(interaction) {
+		await interaction.client.guilds.cache.get(interaction.guild.id).commands.create(
+			{
+				name: this.name,
+				description: this.description,
+				options: this.options,
+				defaultPermission: this.defaultPermission,
+			},
+		);
+	},
 	execute: async function(interaction) {
 		if (interaction.options[0].name === 'add') {
 			const genreName = interaction.options[0].options[0].value;

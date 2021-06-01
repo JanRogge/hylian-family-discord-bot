@@ -16,15 +16,21 @@ module.exports = {
 			required: true,
 		},
 	],
-	defaultPermission: true,
+	defaultPermission: false,
 	// Only Admins
 	permissions: [
 		{
 			id: '139415003680735233',
 			type: 'USER',
-			permissions: true,
+			permission: true,
 		},
 	],
+	disable: async function(interaction) {
+		await Settings.update({ code_channel_id: null, live_role_id: null }, { where: { guild_id: interaction.guild.id } });
+	},
+	enable: async function() {
+		return;
+	},
 	execute: async function(interaction) {
 		const codeChannel = interaction.options[0].channel;
 		const liveRole = interaction.options[1].role;

@@ -1,3 +1,5 @@
+const { Permissions } = require('discord.js');
+
 module.exports = {
 	name: 'features',
 	description: 'Enable and disable features',
@@ -58,9 +60,11 @@ module.exports = {
 	],
 	defaultPermission: true,
 	execute: async function(interaction) {
+		if (!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return await interaction.reply('You don\'t have the permission to activate or deactivate features on this server.', { ephemeral: true });
+
 		if (interaction.options[0].name === 'activate') {
 			const command = interaction.client.commands.get(interaction.options[0].options[0].value);
-			await interaction.client.guilds.cache.get(interaction.guild.id).commands.create(
+			const slashCommand = await interaction.client.guilds.cache.get(interaction.guild.id).commands.create(
 				{
 					name: command.name,
 					description: command.description,
@@ -68,6 +72,10 @@ module.exports = {
 					defaultPermission: command.defaultPermission,
 				},
 			);
+			// interaction.guild.ownerID User ID des Server Owners vielleicht alle commands standardmäßig für den owner erlauben
+			const test = await interaction.guild.commands.fetch(slashCommand.id);
+			test.setPermissions(command.permissions);
+			command.enable(interaction);
 
 			return await interaction.reply(`Command ${command.name} is now active.`, { ephemeral: true });
 		}
@@ -77,6 +85,7 @@ module.exports = {
 
 			if (!command) return await interaction.reply(`Command ${command.name} is not active!`, { ephemeral: true });
 
+			interaction.client.commands.get(interaction.options[0].options[0].value).disable(interaction);
 			await interaction.client.guilds.cache.get(interaction.guild.id).commands.delete(command.id);
 
 			return await interaction.reply(`Command ${command.name} is now deactivated`, { ephemeral: true });

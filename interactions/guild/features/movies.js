@@ -114,6 +114,13 @@ module.exports = {
 			permissions: true,
 		},
 	],
+	disable: async function(interaction) {
+		await Movie.destroy({ where: { guild_id: interaction.guild.id } });
+		interaction.client.commands.get('genre').disable(interaction);
+	},
+	enable: async function(interaction) {
+		interaction.client.commands.get('genre').enable(interaction);
+	},
 	execute: async function(interaction) {
 		if (interaction.options[0].name === 'add') {
 			const args = interaction.options[0].options;

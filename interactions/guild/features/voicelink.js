@@ -39,6 +39,12 @@ module.exports = {
 			permissions: true,
 		},
 	],
+	disable: async function(interaction) {
+		await VoiceRoleLink.destroy({ where: { guild_id: interaction.guild.id } });
+	},
+	enable: async function() {
+		return;
+	},
 	execute: async function(interaction) {
 		if (interaction.options[0].name === 'add') {
 			if (!interaction.member.voice.channelID) return await interaction.reply('Du musst für diesen Befehl in gewünschten Voice Channel sein!', { ephemeral: true });
