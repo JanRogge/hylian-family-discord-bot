@@ -29,7 +29,7 @@ module.exports = {
 			description: 'Delete a genre',
 			options: [
 				{
-					name: 'name',
+					name: 'genrename',
 					type: 'STRING',
 					description: 'Name of the genre',
 					required: true,
@@ -66,13 +66,13 @@ module.exports = {
 	permissions: [
 		{
 			id: '766633420713230336',
-			type: 'ROLES',
-			permissions: true,
+			type: 'ROLE',
+			permission: true,
 		},
 		{
 			id: '599906769589764097',
-			type: 'ROLES',
-			permissions: true,
+			type: 'ROLE',
+			permission: true,
 		},
 	],
 	disable: async function(interaction) {
@@ -93,9 +93,9 @@ module.exports = {
 		);
 	},
 	execute: async function(interaction) {
-		if (interaction.options[0].name === 'add') {
-			const genreName = interaction.options[0].options[0].value;
-			const genreColor = interaction.options[0].options[1].value;
+		if (interaction.options.first().name === 'add') {
+			const genreName = interaction.options.first().options.get('genrename').value;
+			const genreColor = interaction.options.first().options.get('color').value;
 
 			try {
 				const movie = await Genre.create({
@@ -103,38 +103,38 @@ module.exports = {
 					color: genreColor,
 					guild_id: interaction.guild.id,
 				});
-				return await interaction.reply(`Gerne ${movie.name} wurde hinzugefügt.`, { ephemeral: true });
+				return await interaction.reply({ content: `Gerne ${movie.name} wurde hinzugefügt.`, ephemeral: true });
 			}
 			catch (e) {
 				if (e.name === 'SequelizeUniqueConstraintError') {
-					return await interaction.reply('Der Gerne oder Farbe existiert bereits.', { ephemeral: true });
+					return await interaction.reply({ content: 'Der Gerne oder Farbe existiert bereits.', ephemeral: true });
 				}
-				return await interaction.reply('Es gabe beim hinzufügen einen Fehler.', { ephemeral: true });
+				return await interaction.reply({ content: 'Es gabe beim hinzufügen einen Fehler.', ephemeral: true });
 			}
 		}
-		else if (interaction.options[0].name === 'edit') {
-			const genreName = interaction.options[0].options[0].value;
-			const genreColor = interaction.options[0].options[1].value;
+		else if (interaction.options.first().name === 'edit') {
+			const genreName = interaction.options.first().options.get('genrename').value;
+			const genreColor = interaction.options.first().options.get('color').value;
 
 			// equivalent to: UPDATE tags (descrption) values (?) WHERE name = ?;
 			const affectedRows = await Genre.update({ color: genreColor }, { where: { name: genreName, guild_id: interaction.guild.id } });
 			if (affectedRows > 0) {
-				return await interaction.reply(`Genre ${genreName} was edited.`, { ephemeral: true });
+				return await interaction.reply({ content: `Genre ${genreName} was edited.`, ephemeral: true });
 			}
-			return await interaction.reply(`Could not find a movie with name ${genreName}.`, { ephemeral: true });
+			return await interaction.reply({ content: `Could not find a movie with name ${genreName}.`, ephemeral: true });
 		}
-		else if (interaction.options[0].name === 'delete') {
-			const genreName = interaction.options[0].options[0].value;
+		else if (interaction.options.first().name === 'delete') {
+			const genreName = interaction.options.first().options.get('genrename').value;
 
 			const rowCount = await Genre.destroy({ where: { name: genreName, guild_id: interaction.guild.id } });
-			if (!rowCount) return await interaction.reply('That genre did not exist.', { ephemeral: true });
+			if (!rowCount) return await interaction.reply({ content: 'That genre did not exist.', ephemeral: true });
 
-			return await interaction.reply('Genre deleted.', { ephemeral: true });
+			return await interaction.reply({ content: 'Genre deleted.', ephemeral: true });
 		}
-		else if (interaction.options[0].name === 'show') {
+		else if (interaction.options.first().name === 'show') {
 			const genres = await Genre.findAll({ where: { guild_id: interaction.guild.id } });
 
-			if (!genres.length) return await interaction.reply('Es gibt keine Genres.', { ephemeral: true });
+			if (!genres.length) return await interaction.reply({ content: 'Es gibt keine Genres.', ephemeral: true });
 
 			let genreField = '';
 
@@ -148,7 +148,7 @@ module.exports = {
 				.addFields(
 					{ name: 'Name', value: genreField, inline: true },
 				);
-			return await interaction.reply('', { ephemeral: true, embeds: [embed] });
+			return await interaction.reply({ content: '', ephemeral: true, embeds: [embed] });
 		}
 	},
 

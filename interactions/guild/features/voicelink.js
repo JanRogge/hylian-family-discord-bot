@@ -36,7 +36,7 @@ module.exports = {
 		{
 			id: '139415003680735233',
 			type: 'USER',
-			permissions: true,
+			permission: true,
 		},
 	],
 	disable: async function(interaction) {
@@ -46,13 +46,13 @@ module.exports = {
 		return;
 	},
 	execute: async function(interaction) {
-		if (interaction.options[0].name === 'add') {
+		if (interaction.options.first().name === 'add') {
 			if (!interaction.member.voice.channelID) return await interaction.reply('Du musst für diesen Befehl in gewünschten Voice Channel sein!', { ephemeral: true });
 
 			const voiceLinks = await VoiceRoleLink.findOne({ where: { guild_id: interaction.guild.id, voice_channel_id: interaction.member.voice.channelID } });
 
 			if (voiceLinks) {
-				const roleString = voiceLinks.role_ids + `,${interaction.options[0].options[0].value}`;
+				const roleString = voiceLinks.role_ids + `,${interaction.options.first().options.first().value}`;
 
 				const affectedRows = await VoiceRoleLink.update({ role_ids: roleString }, { where: { guild_id: interaction.guild.id, voice_channel_id: interaction.member.voice.channelID } });
 				if (affectedRows > 0) {
@@ -78,7 +78,7 @@ module.exports = {
 				return await interaction.reply('There was an error trying to add the voicelink!', { ephemeral: true });
 			}
 		}
-		else if (interaction.options[0].name === 'delete') {
+		else if (interaction.options.first().name === 'delete') {
 			if (!interaction.member.voice.channelID) return await interaction.reply('Du musst für diesen Befehl in gewünschten Voice Channel sein!', { ephemeral: true });
 
 			const voiceLinks = await VoiceRoleLink.findOne({ where: { guild_id: interaction.guild.id, voice_channel_id: interaction.member.voice.channelID } });
@@ -92,7 +92,7 @@ module.exports = {
 					return await interaction.reply(`Voicelink for channel <#${interaction.member.voice.channelID}> was deleted.`, { ephemeral: true });
 				}
 
-				const roleString = roleArray.filter(roleID => roleID !== interaction.options[0].options[0].value).join();
+				const roleString = roleArray.filter(roleID => roleID !== interaction.options.first().options.first().value).join();
 
 				const affectedRows = await VoiceRoleLink.update({ role_ids: roleString }, { where: { guild_id: interaction.guild.id, voice_channel_id: interaction.member.voice.channelID } });
 				if (affectedRows > 0) {

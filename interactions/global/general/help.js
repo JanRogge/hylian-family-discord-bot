@@ -13,22 +13,26 @@ module.exports = {
 		const data = [];
 		let globalCommands = await interaction.client.application.commands.fetch();
 		if (interaction.guild) {
-			globalCommands = globalCommands.concat(await interaction.guild.commands.fetch());
+			const guildCommands = await interaction.guild.commands.fetch();
+			globalCommands = globalCommands.concat(guildCommands);
 		}
 
-		if (!args.length) {
-			data.push('Here\'s a list of all my commands:');
+		if (!args.size) {
+			data.push('Here\'s a list of all my commands:\n');
 			data.push(globalCommands.map(command => command.name).join(', '));
 			data.push('\nYou can send `/help [command name]` to get info on a specific command!');
 
-			return await interaction.reply(data, { ephemeral: true });
+			return await interaction.reply({ content: data.join(), ephemeral: true });
 		}
 
-		const name = args[0].value;
-		const command = globalCommands.get(name);
+		const name = args.first().value;
+		const command = globalCommands.find(com => com.name === name);
+
+		console.log(globalCommands);
+		console.log(command);
 
 		if (!command) {
-			return await interaction.reply('That\'s not a valid command!', { ephemeral: true });
+			return await interaction.reply({ content: 'That\'s not a valid command!', ephemeral: true });
 		}
 
 		data.push(`**Name:** ${command.name}`);
@@ -39,6 +43,6 @@ module.exports = {
 
 		data.push(`**Cooldown:** ${command.cooldown || 3} second(s)`);
 
-		await interaction.reply(data, { ephemeral: true });
+		await interaction.reply({ content: data.join(), ephemeral: true });
 	},
 };

@@ -32,8 +32,8 @@ module.exports = {
 		return;
 	},
 	execute: async function(interaction) {
-		const codeChannel = interaction.options[0].channel;
-		const liveRole = interaction.options[1].role;
+		const codeChannel = interaction.options.get('channel').channel;
+		const liveRole = interaction.options.get('role').role;
 
 		const affectedRows = await Settings.update({ code_channel_id: codeChannel.id, live_role_id: liveRole.id }, { where: { guild_id: interaction.guild.id } });
 		if (affectedRows > 0) {

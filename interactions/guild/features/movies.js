@@ -100,18 +100,18 @@ module.exports = {
 	permissions: [
 		{
 			id: '766633420713230336',
-			type: 'ROLES',
-			permissions: true,
+			type: 'ROLE',
+			permission: true,
 		},
 		{
 			id: '599906769589764097',
-			type: 'ROLES',
-			permissions: true,
+			type: 'ROLE',
+			permission: true,
 		},
 		{
 			id: '139415003680735233',
 			type: 'USER',
-			permissions: true,
+			permission: true,
 		},
 	],
 	disable: async function(interaction) {
@@ -122,13 +122,13 @@ module.exports = {
 		interaction.client.commands.get('genre').enable(interaction);
 	},
 	execute: async function(interaction) {
-		if (interaction.options[0].name === 'add') {
-			const args = interaction.options[0].options;
-			const movieName = args[0].value;
-			const movieGenreName = args[1].value;
+		if (interaction.options.first().name === 'add') {
+			const args = interaction.options.first().options;
+			const movieName = args.get('moviename').value;
+			const movieGenreName = args.get('genre').value;
 			const movieGenre = await Genre.findOne({ where: { name: movieGenreName, guild_id: interaction.guild.id } });
-			const moviePlatform = args[2].value;
-			const movieTrailer = args[3].value;
+			const moviePlatform = args.get('plattform').value;
+			const movieTrailer = args.get('trailer').value;
 
 			if (!movieGenre) {
 				return await interaction.reply(`${movieGenreName} ist kein verfügbares Genre.`, { ephemeral: true });
@@ -153,13 +153,13 @@ module.exports = {
 				return await interaction.reply('Es gab beim hinzufügen einen Fehler.', { ephemeral: true });
 			}
 		}
-		else if (interaction.options[0].name === 'edit') {
-			const args = interaction.options[0].options;
-			const movieName = args[0].value;
-			const movieGenreName = args[1].value;
+		else if (interaction.options.first().name === 'edit') {
+			const args = interaction.options.first().options;
+			const movieName = args.get('moviename').value;
+			const movieGenreName = args.get('genre').value;
 			const movieGenre = await Genre.findOne({ where: { name: movieGenreName, guild_id: interaction.guild.id } });
-			// const moviePlatform = args[2].value;
-			// const movieTrailer = args[3].value;
+			// const moviePlatform = args.get('plattform').value;
+			// const movieTrailer = args.get('trailer').value;
 
 			if (!movieGenre) {
 				return await interaction.reply(`${movieGenreName} ist kein verfügbares Genre.`, { ephemeral: true });
@@ -172,19 +172,19 @@ module.exports = {
 			}
 			return await interaction.reply(`Could not find a movie with name ${movieName}.`, { ephemeral: true });
 		}
-		else if (interaction.options[0].name === 'delete') {
-			const movieName = interaction.options[0].options[0].value;
+		else if (interaction.options.first().name === 'delete') {
+			const movieName = interaction.options.first().options.get('moviename').value;
 
 			const rowCount = await Movie.destroy({ where: { name: movieName, guild_id: interaction.guild.id } });
 			if (!rowCount) return await interaction.reply('That movie did not exist.', { ephemeral: true });
 
 			return await interaction.reply('Movie deleted.', { ephemeral: true });
 		}
-		else if (interaction.options[0].name === 'show') {
+		else if (interaction.options.first().name === 'show') {
 			let movieList = [];
 
-			if (interaction.options[0].options) {
-				const movieGenreName = interaction.options[0].options[0].value;
+			if (interaction.options.first().options) {
+				const movieGenreName = interaction.options.first().options.get('genre').value;
 				const movieGenre = await Genre.findOne({ where: { name: movieGenreName, guild_id: interaction.guild.id } });
 
 				movieList = await Movie.findAll({
@@ -238,7 +238,7 @@ module.exports = {
 
 			return;
 		}
-		else if (interaction.options[0].name === 'random') {
+		else if (interaction.options.first().name === 'random') {
 			const movieList = await Movie.findAll({
 				where: { guild_id: interaction.guild.id },
 				include: ['genre'],

@@ -100,7 +100,7 @@ module.exports = {
 		{
 			id: '139415003680735233',
 			type: 'USER',
-			permissions: true,
+			permission: true,
 		},
 	],
 	disable: async function() {

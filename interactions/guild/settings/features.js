@@ -62,8 +62,10 @@ module.exports = {
 	execute: async function(interaction) {
 		if (!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return await interaction.reply('You don\'t have the permission to activate or deactivate features on this server.', { ephemeral: true });
 
-		if (interaction.options[0].name === 'activate') {
-			const command = interaction.client.commands.get(interaction.options[0].options[0].value);
+		const choiceValue = interaction.options.first().options.get('commandname').value;
+
+		if (interaction.options.first().name === 'activate') {
+			const command = interaction.client.commands.get(choiceValue);
 			const slashCommand = await interaction.client.guilds.cache.get(interaction.guild.id).commands.create(
 				{
 					name: command.name,
@@ -79,13 +81,13 @@ module.exports = {
 
 			return await interaction.reply(`Command ${command.name} is now active.`, { ephemeral: true });
 		}
-		else if (interaction.options[0].name === 'deactivate') {
+		else if (interaction.options.first().name === 'deactivate') {
 			const globalCommands = await interaction.guild.commands.fetch();
-			const command = globalCommands.find(cmd => cmd.name === interaction.options[0].options[0].value);
+			const command = globalCommands.find(cmd => cmd.name === choiceValue);
 
 			if (!command) return await interaction.reply(`Command ${command.name} is not active!`, { ephemeral: true });
 
-			interaction.client.commands.get(interaction.options[0].options[0].value).disable(interaction);
+			interaction.client.commands.get(choiceValue).disable(interaction);
 			await interaction.client.guilds.cache.get(interaction.guild.id).commands.delete(command.id);
 
 			return await interaction.reply(`Command ${command.name} is now deactivated`, { ephemeral: true });
