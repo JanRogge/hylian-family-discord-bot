@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Client, Intents, Collection } = require('discord.js');
+const { Client, Intents } = require('discord.js');
 
 const client = new Client(
 	{
@@ -18,9 +18,7 @@ const client = new Client(
 	},
 );
 
-client.commands = new Collection();
-
-// require('./handlers/commandloader')(client);
+require('./handlers/commandLoader')(client);
 require('./handlers/events')(client);
 
 client.login();

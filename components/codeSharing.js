@@ -20,6 +20,8 @@ module.exports = {
 				return !blacklisted && member.id !== message.author.id ;
 			});
 
+			
+
 			membersWithOutAuthor.forEach(member => {
 				console.log(`Nachricht an ${member.displayName} (${member.user.tag}) gesendet via message`);
 				member.send(`Der Gamecode/Invitelink ist: ${messageContent}`);
