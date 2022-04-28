@@ -7,8 +7,6 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
 	logging: false,
 });
 
-const Movie = require('./models/Movies')(sequelize, Sequelize.DataTypes);
-const Genre = require('./models/Genre')(sequelize, Sequelize.DataTypes);
 const Settings = require('./models/Settings')(sequelize, Sequelize.DataTypes);
 const VoiceRoleLink = require('./models/VoiceRoleLink')(sequelize, Sequelize.DataTypes);
 
@@ -17,7 +15,7 @@ const alter = process.argv.includes('--alter') || process.argv.includes('-a');
 
 sequelize.sync({ force, alter }).then(async () => {
 	const settings = [
-		Settings.upsert({ guild_id: '599895341487226881', prefix: '#' }),
+		Settings.upsert({ guild_id: '599895341487226881'}),
 	];
 	await Promise.all(settings);
 	console.log('Database synced');
