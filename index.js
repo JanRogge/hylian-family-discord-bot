@@ -4,7 +4,7 @@ const { Client, Intents } = require('discord.js');
 const client = new Client(
 	{
 		presence: {
-			activities: [{ name: 'hylian_tami', type: 'STREAMING', url: 'twitch.tv/hylian_tami' }],
+			activities: [{ name: 'hylian_tami', type: 'WATCHING', url: 'https://twitch.tv/hylian_tami' }],
 			status: 'online',
 		},
 
