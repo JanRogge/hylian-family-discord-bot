@@ -1,5 +1,4 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const { Permissions } = require('discord.js');
+const { SlashCommandBuilder, PermissionsBitField } = require('discord.js');
 const { VoiceRoleLink } = require('../dbObjects');
 
 module.exports = {
@@ -33,7 +32,7 @@ module.exports = {
         )
         .setDefaultPermission(false),
 	async execute(interaction) {
-		if (!interaction.member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return await interaction.reply('You don\'t have the permission to activate or deactivate features on this server.', { ephemeral: true });
+		if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageGuild)) return await interaction.reply('You don\'t have the permission to activate or deactivate features on this server.', { ephemeral: true });
 
 		const commandname = interaction.options.getString('commandname');
 
