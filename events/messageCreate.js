@@ -16,6 +16,7 @@ module.exports = {
 		if (message.author.bot) return;
 
 		// Handel code Sharing for codes Channel
-		messageHandling(message, settings);
+		// TODO Fix Gamecode
+		// messageHandling(message, settings);
 	}
 };

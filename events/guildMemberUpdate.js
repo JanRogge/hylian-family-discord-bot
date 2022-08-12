@@ -10,7 +10,8 @@ module.exports = {
 			});
 	
 			// Handle sending new role members the last message of the code channel
-			roleHandling(oldState, newState, settings);
+			// TODO Fix Gamecode
+			// roleHandling(oldState, newState, settings);
 		}
 	}
 };
