@@ -1,6 +1,6 @@
-Discord Bot for the hylian family discord
+# Discord Bot for the hylian family discord
 
-Current Features
+### Current Features
 - Voice <-> Channel linking 
    - Assings users a role for the time they are in a assigend channel
 - Code Sharing (Currently disabled)
