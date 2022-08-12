@@ -1,15 +1,9 @@
-//TODO
+Discord Bot for the hylian family discord
 
-* Update gerne
-* Link gerne to movie creation
-* Display each gerne by its own
-* Support series
-
-
-// Ban System
-* Commands
-    * Add warning
-    * Add ban
-    * Remove ban
-    * Lookup Waring/Ban Reason
-* Permanent Warning/Ban List without Reason that updates
+Current Features
+- Voice <-> Channel linking 
+   - Assings users a role for the time they are in a assigend channel
+- Code Sharing (Currently disabled)
+   - Shares a Text Message of a channel with all users of a role via privat message
+    - Supports a blacklist role
+ 
