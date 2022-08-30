@@ -21,7 +21,11 @@ module.exports = {
 					voiceRolesR.push(newState.guild.roles.cache.find(role => role.id === roleID));
 				});
 
-				await memberRoles.remove(voiceRolesR);
+				try {
+					await memberRoles.remove(voiceRolesR);
+				} catch (e) {
+					console.log('Rolle über der Rolle des Bots');
+				}
 			}
 
 			if (voiceRolesAdd) {
@@ -32,7 +36,11 @@ module.exports = {
 					voiceRolesA.push(newState.guild.roles.cache.find(role => role.id === roleID));
 				});
 
-				await memberRoles.add(voiceRolesA);
+				try {
+					await memberRoles.add(voiceRolesA);
+				} catch (e) {
+					console.log('Rolle über der Rolle des Bots');
+				}
 			}
 
 		}
