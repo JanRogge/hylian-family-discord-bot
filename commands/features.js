@@ -47,7 +47,6 @@ module.exports = {
 		}
 		else if (interaction.options.getSubcommand() === 'deactivate') {
 			const globalCommands = await interaction.guild.commands.fetch();
-			console.log(globalCommands);
 			const command = globalCommands.find(cmd => cmd.name === commandname);
 
 			if (!command) return await interaction.reply({ content: `Command ${commandname} is not active!`, ephemeral: true });
