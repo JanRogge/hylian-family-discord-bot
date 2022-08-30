@@ -34,9 +34,6 @@ module.exports = {
 
 		data.push(`**Name:** ${command.name}`);
 
-		if (command.description) data.push(`**Description:** ${command.description}`);
-		if (command.usage) data.push(`**Usage:** /${command.name} ${command.usage}`);
-
 		await interaction.reply({ content: data.join(), ephemeral: true });
 	},
 };

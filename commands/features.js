@@ -43,18 +43,19 @@ module.exports = {
 			);
 			command.enable(interaction);
 
-			return await interaction.reply({ content: `Command ${command.data.name} is now active.`, ephemeral: true });
+			return await interaction.reply({ content: `Command ${commandname} is now active.`, ephemeral: true });
 		}
 		else if (interaction.options.getSubcommand() === 'deactivate') {
 			const globalCommands = await interaction.guild.commands.fetch();
+			console.log(globalCommands);
 			const command = globalCommands.find(cmd => cmd.name === commandname);
 
-			if (!command) return await interaction.reply({ content: `Command ${command.name} is not active!`, ephemeral: true });
+			if (!command) return await interaction.reply({ content: `Command ${commandname} is not active!`, ephemeral: true });
 
 			interaction.client.commands.get(commandname).disable(interaction);
 			await interaction.client.guilds.cache.get(interaction.guild.id).commands.delete(command.id);
 
-			return await interaction.reply({ content: `Command ${command.name} is now deactivated`, ephemeral: true });
+			return await interaction.reply({ content: `Command ${commandname} is now deactivated`, ephemeral: true });
 		}
 	},
 };
