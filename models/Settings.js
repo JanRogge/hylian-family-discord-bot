@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		reward_channel_id: DataTypes.STRING,
 		reward_id: DataTypes.STRING,
+		live_channel_id: DataTypes.STRING,
 		twitch_id: DataTypes.STRING,
 		cron_active: DataTypes.BOOLEAN,
 	}, {

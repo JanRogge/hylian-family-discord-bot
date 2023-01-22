@@ -33,6 +33,23 @@ module.exports = {
 			topGifter = await authClient.users.getUserById(gifts.user_id);
 		}
 
+		const userAuthClient = client.authClients.get(broadcaster);
+		const leaderboard = userAuthClient.bits.getLeaderboard({
+			count: 2,
+			period: 'month',
+			startDate: new Date(`${date.year}-${date.month}-01T08:00:00.0Z`),
+		});
+
+		if (leaderboard.entries.length >= 1) {
+			if (gifts.user_id !== leaderboard.entries[0].userId) {
+				topCheerer = await authClient.users.getUserById(leaderboard.entries[0].userId);
+			}
+			else {
+				topCheerer = await authClient.users.getUserById(leaderboard.entries[1].userId);
+			}
+		}
+
+		/*
 		const bits = await Bits.findOne({
 			attributes: [
 				'user_id',
@@ -57,6 +74,7 @@ module.exports = {
 		if (bits) {
 			topCheerer = await authClient.users.getUserById(bits.user_id);
 		}
+		*/
 
 		const redemptions = await Rewards.findAll({
 			attributes: [
