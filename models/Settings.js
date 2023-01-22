@@ -10,6 +10,9 @@ module.exports = (sequelize, DataTypes) => {
 			unique: true,
 		},
 		reward_channel_id: DataTypes.STRING,
+		reward_id: DataTypes.STRING,
+		twitch_id: DataTypes.STRING,
+		cron_active: DataTypes.BOOLEAN,
 	}, {
 		timestamps: false,
 	});

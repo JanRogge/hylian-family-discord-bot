@@ -5,7 +5,7 @@ const twitchApiClient = require('../../services/twitchApiClient');
 module.exports = {
 	async start(client) {
 		const listener = client.listener;
-		const authSubscription = await listener.subscribeToUserAuthorizationGrantEvents(process.env.TWITCHCLIENTID, async e => {
+		const authSubscription = await listener.subscribeToUserAuthorizationGrantEvents(process.env.TWITCH_CLIENT_ID, async e => {
 			console.log(`${e.userId} just added auth!`);
 			await twitchApiClient.start(client, e.userId);
 

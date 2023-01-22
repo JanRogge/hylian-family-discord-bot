@@ -6,7 +6,7 @@ const { Collection } = require('discord.js');
 
 module.exports = {
 	async start(client) {
-		const authProvider = new ClientCredentialsAuthProvider(process.env.TWITCHCLIENTID, process.env.TWITCHCLIENTSECRET);
+		const authProvider = new ClientCredentialsAuthProvider(process.env.TWITCH_CLIENT_ID, process.env.TWITCH_CLIENT_SECRET);
 		const apiClient = new ApiClient({ authProvider });
 		let adapter;
 

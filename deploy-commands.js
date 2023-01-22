@@ -1,6 +1,6 @@
 require('dotenv').config();
 const fs = require('node:fs');
-const { REST, Routes } = require('@discordjs/rest');
+const { REST, Routes } = require('discord.js');
 
 const commands = [];
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -19,7 +19,7 @@ const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
 
 		// The put method is used to fully refresh all commands in the guild with the current set
 		const data = await rest.put(
-			Routes.applicationGuildCommands(process.env.CLIENTID, '599895341487226881'),
+			Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID, '599895341487226881'),
 			{ body: commands },
 		);
 

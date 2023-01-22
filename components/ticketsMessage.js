@@ -6,32 +6,11 @@ const monthNames = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
 ];
 
 module.exports = {
-	fetchData: async function(client, date) {
+	fetchData: async function(client, date, broadcaster) {
 		const authClient = client.authClients.get('app');
 		let topCheerer;
 		let topGifter;
 		let redemptionUsers;
-
-		const bits = await Bits.findOne({
-			attributes: [
-				'user_id',
-				[Sequelize.fn('sum', Sequelize.col('amount')), 'totalBits'],
-			],
-			where: {
-				[Op.and] : [
-					Sequelize.fn('EXTRACT(MONTH from "createdAt") =', date.month),
-					Sequelize.fn('EXTRACT(YEAR from "createdAt") =', date.year),
-				],
-			},
-			order: [
-				['totalBits', 'DESC'],
-			],
-			group: 'user_id',
-		});
-
-		if (bits) {
-			topCheerer = await authClient.users.getUserById(bits.user_id);
-		}
 
 		const gifts = await Gifts.findOne({
 			attributes: [
@@ -43,6 +22,7 @@ module.exports = {
 					Sequelize.fn('EXTRACT(MONTH from "createdAt") =', date.month),
 					Sequelize.fn('EXTRACT(YEAR from "createdAt") =', date.year),
 				],
+				broadcaster_id: broadcaster,
 			},
 			order: [
 				['totalGifts', 'DESC'],
@@ -51,6 +31,31 @@ module.exports = {
 		});
 		if (gifts) {
 			topGifter = await authClient.users.getUserById(gifts.user_id);
+		}
+
+		const bits = await Bits.findOne({
+			attributes: [
+				'user_id',
+				[Sequelize.fn('sum', Sequelize.col('amount')), 'totalBits'],
+			],
+			where: {
+				[Op.and] : [
+					Sequelize.fn('EXTRACT(MONTH from "createdAt") =', date.month),
+					Sequelize.fn('EXTRACT(YEAR from "createdAt") =', date.year),
+				],
+				user_id: {
+					[Op.ne]: gifts.user_id,
+				},
+				broadcaster_id: broadcaster,
+			},
+			order: [
+				['totalBits', 'DESC'],
+			],
+			group: 'user_id',
+		});
+
+		if (bits) {
+			topCheerer = await authClient.users.getUserById(bits.user_id);
 		}
 
 		const redemptions = await Rewards.findAll({
@@ -62,6 +67,7 @@ module.exports = {
 					Sequelize.fn('EXTRACT(MONTH from "createdAt") =', date.month),
 					Sequelize.fn('EXTRACT(YEAR from "createdAt") =', date.year),
 				],
+				broadcaster_id: broadcaster,
 			},
 		});
 

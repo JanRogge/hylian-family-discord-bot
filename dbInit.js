@@ -31,7 +31,7 @@ const alter = process.argv.includes('--alter') || process.argv.includes('-a');
 
 sequelize.sync({ force, alter }).then(async () => {
 	const settings = [
-		Settings.upsert({ guild_id: '599895341487226881'}),
+		Settings.upsert({ guild_id: '599895341487226881', reward_channel_id: '791703686912016405', twitch_id: '31547053', cron_active:false }),
 	];
 	await Promise.all(settings);
 	console.log('Database synced');

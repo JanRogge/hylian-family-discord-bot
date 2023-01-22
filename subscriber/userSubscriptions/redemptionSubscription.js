@@ -1,4 +1,4 @@
-const { Rewards } = require('../../dbObjects');
+const { Rewards, Settings } = require('../../dbObjects');
 const { Sequelize, Op } = require('sequelize');
 const { updateTicketMessage, fetchTicketMessage, fetchData } = require('../../components/ticketsMessage');
 
@@ -6,7 +6,13 @@ module.exports = {
 	name: 'redemptionSubscription',
 	async start(client, userId) {
 		const listener = client.listener;
-		const subscription = await listener.subscribeToChannelRedemptionAddEvents(userId, async s => {
+		const settings = await Settings.findOne({
+			where: {
+				twitch_id: userId,
+			},
+		});
+
+		const subscription = await listener.subscribeToChannelRedemptionAddEventsForReward(userId, settings.reward_id, async s => {
 			const today = new Date();
 			const month = today.getMonth() + 1;
 			const year = today.getFullYear();
@@ -25,8 +31,9 @@ module.exports = {
 			if (redemption) {
 				const authClient = client.authClients.get(userId);
 
-				const rewardRedemption = authClient.channelPoints.getRedemptionById(userId, s.rewardId, s.id);
-				await rewardRedemption.updateStatus('CANCELED');
+				console.log(s.userId + 'hatte schon ein Los diesen monat!');
+				//const rewardRedemption = authClient.channelPoints.getRedemptionById(userId, s.rewardId, s.id);
+				//await rewardRedemption.updateStatus('CANCELED');
 
 				return;
 			}
@@ -34,11 +41,12 @@ module.exports = {
 			await Rewards.create({
 				user_id: s.userId,
 				broadcaster_id: s.broadcasterId,
+				won: false,
 			});
 
 			const { channel, message } = await fetchTicketMessage(
 				client,
-				'599895341487226881',
+				settings.guild_id,
 				{
 					month,
 					year,
@@ -49,7 +57,7 @@ module.exports = {
 				return;
 			}
 
-			const { redemptionUsers } = await fetchData(client, { month, year });
+			const { redemptionUsers } = await fetchData(client, { month, year }, userId);
 
 			const sortedUserNames = [];
 			for (const redemptionUser of redemptionUsers) {
@@ -82,6 +90,10 @@ module.exports = {
 				redemptionsString,
 				{},
 			);
+		});
+
+		const subscriptionToAll = await listener.subscribeToChannelRedemptionAddEvents(userId, async s => {
+			console.log(`Reward ${s.rewardTitle} mit der ID ${s.rewardId} wurde eingelöst`);
 		});
 
 		console.log(await subscription.getCliTestCommand());

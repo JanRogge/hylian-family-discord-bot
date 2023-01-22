@@ -24,23 +24,29 @@ module.exports = {
 				.setRequired(true)),
 	async execute(interaction) {
 		const settings = await Settings.findOne({
-			where: { guild_id: '599895341487226881' },
+			where: { guild_id: interaction.guildId },
 		});
 
 		const channel = await interaction.client.channels.fetch(settings.reward_channel_id);
 
 		const message = await Messages.findOne({
 			where: {
-				guild_id: '599895341487226881',
+				guild_id: settings.guild_id,
 				name: interaction.options.getString('monat-jahr'),
 				done: false,
 			},
 		});
 
 		const dateOption = interaction.options.getString('monat-jahr');
+
+		if (!dateOption) {
+			await interaction.reply({ content: 'Fehler kein Monat ausgewählt!', ephemeral: true });
+			return;
+		}
+
 		const dateSeperate = dateOption.split(' ');
 
-		const { topGifter, topCheerer, redemptionUsers } = await fetchData(interaction.client, { month: monthNames.indexOf(dateSeperate[0]) + 1, year: dateSeperate[1] });
+		const { topGifter, topCheerer, redemptionUsers } = await fetchData(interaction.client, { month: monthNames.indexOf(dateSeperate[0]) + 1, year: dateSeperate[1] }, settings.twitch_id);
 
 		let winner;
 		let redemptionsString = '';
@@ -95,10 +101,22 @@ module.exports = {
 				},
 			});
 
+		await Rewards.update(
+			{ won: true },
+			{
+				where: {
+					user_id: winner.id,
+				},
+			});
+
 		await interaction.reply({ content: 'Gewinner wurde eingetragen!', ephemeral: true });
 	},
 	async autocomplete(interaction) {
 		const authClient = interaction.client.authClients.get('app');
+
+		const settings = await Settings.findOne({
+			where: { guild_id: interaction.guildId },
+		});
 
 		const focusedOption = interaction.options.getFocused(true);
 		const choices = [];
@@ -111,6 +129,8 @@ module.exports = {
 					'createdAt',
 				],
 				where: {
+					guild_id: settings.guild_id,
+					channel_id: settings.reward_channel_id,
 					done: false,
 				},
 			});
@@ -132,6 +152,7 @@ module.exports = {
 						Sequelize.fn('EXTRACT(MONTH from "createdAt") =', monthNames.indexOf(dateSeperate[0]) + 1),
 						Sequelize.fn('EXTRACT(YEAR from "createdAt") =', dateSeperate[1]),
 					],
+					broadcaster_id: settings.twitch_id,
 				},
 			});
 
