@@ -76,7 +76,7 @@ module.exports = {
 		});
 
 		cron.schedule('0,10,20,30,40,50 * * * *', async function() {
-			axios.post(`https://${process.env.APP_NAME}.herokuapp.com/`)
+			axios.get(`https://${process.env.APP_NAME}.herokuapp.com/`)
 				.then(function(response) {
 					console.log(response);
 				})
