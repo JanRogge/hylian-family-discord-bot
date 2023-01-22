@@ -1,2 +1,2 @@
-web: node .\services\oAuthServer.js  
+web: node oAuthServer.js  
 worker: node index.js

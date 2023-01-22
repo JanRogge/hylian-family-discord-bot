@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const { StaticAuthProvider } = require('@twurple/auth');
 const { ApiClient } = require('@twurple/api');
-const { TwitchAuth } = require('../dbObjects');
+const { TwitchAuth } = require('./dbObjects');
 
 const app = express();
 
