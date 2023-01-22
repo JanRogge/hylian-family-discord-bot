@@ -1,14 +1,30 @@
 require('dotenv').config();
 const Sequelize = require('sequelize');
 
-console.log(process.env.DATABASE_URL);
-
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
-	logging: false,
-});
+let sequelize;
+if (process.env.NODE_ENV === 'development') {
+	sequelize = new Sequelize(process.env.DATABASE_URL, {
+		logging: false,
+	});
+}
+else {
+	sequelize = new Sequelize(process.env.DATABASE_URL, {
+		logging: false,
+		dialectOptions: {
+			ssl: {
+				rejectUnauthorized: false,
+			},
+		},
+	});
+}
 
 const Settings = require('./models/Settings')(sequelize, Sequelize.DataTypes);
 const VoiceRoleLink = require('./models/VoiceRoleLink')(sequelize, Sequelize.DataTypes);
+const Bits = require('./models/Bits')(sequelize, Sequelize.DataTypes);
+const Gifts = require('./models/Gifts')(sequelize, Sequelize.DataTypes);
+const Messages = require('./models/Messages')(sequelize, Sequelize.DataTypes);
+const Rewards = require('./models/Rewards')(sequelize, Sequelize.DataTypes);
+const TwitchAuth = require('./models/TwitchAuth')(sequelize, Sequelize.DataTypes);
 
 const force = process.argv.includes('--force') || process.argv.includes('-f');
 const alter = process.argv.includes('--alter') || process.argv.includes('-a');

@@ -9,9 +9,7 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.STRING,
 			unique: true,
 		},
-		code_channel_id: DataTypes.STRING,
-		live_role_id: DataTypes.STRING,
-		code_blacklist_roles_id: DataTypes.STRING,
+		reward_channel_id: DataTypes.STRING,
 	}, {
 		timestamps: false,
 	});

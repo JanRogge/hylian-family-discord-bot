@@ -11,5 +11,5 @@ module.exports = {
 			console.error(error);
 			await interaction.reply('There was an error trying to execute that command!', { ephemeral: true });
 		}
-	}
+	},
 };

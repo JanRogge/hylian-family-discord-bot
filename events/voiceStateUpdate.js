@@ -23,7 +23,8 @@ module.exports = {
 
 				try {
 					await memberRoles.remove(voiceRolesR);
-				} catch (e) {
+				}
+				catch (e) {
 					console.log('Rolle über der Rolle des Bots');
 				}
 			}
@@ -38,11 +39,12 @@ module.exports = {
 
 				try {
 					await memberRoles.add(voiceRolesA);
-				} catch (e) {
+				}
+				catch (e) {
 					console.log('Rolle über der Rolle des Bots');
 				}
 			}
 
 		}
-	}
+	},
 };

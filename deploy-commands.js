@@ -1,7 +1,6 @@
 require('dotenv').config();
 const fs = require('node:fs');
-const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v9');
+const { REST, Routes } = require('@discordjs/rest');
 
 const commands = [];
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -11,8 +10,23 @@ for (const file of commandFiles) {
 	commands.push(command.data.toJSON());
 }
 
-const rest = new REST({ version: '9' }).setToken(process.env.DISCORD_TOKEN);
+const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
 
-rest.put(Routes.applicationCommands(process.env.CLIENTID, process.argv.slice(2)[0]), { body: commands })
-	.then(() => console.log('Successfully registered application commands.'))
-	.catch(console.error);
+// and deploy your commands!
+(async () => {
+	try {
+		console.log(`Started refreshing ${commands.length} application (/) commands.`);
+
+		// The put method is used to fully refresh all commands in the guild with the current set
+		const data = await rest.put(
+			Routes.applicationGuildCommands(process.env.CLIENTID, '599895341487226881'),
+			{ body: commands },
+		);
+
+		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+	}
+	catch (error) {
+		// And of course, make sure you catch and log any errors!
+		console.error(error);
+	}
+})();
