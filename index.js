@@ -1,6 +1,5 @@
 require('dotenv').config();
 const { Client, GatewayIntentBits } = require('discord.js');
-const oAuthServer = require('./services/oAuthServer');
 const eventSubListener = require('./services/eventSubListener');
 const cron = require('./services/cron');
 const authSubscriber = require('./subscriber/appSubscriptions/authSubscriber');
@@ -25,7 +24,6 @@ const client = new Client(
 (async () => {
 	require('./handlers/commandLoader')(client);
 	require('./handlers/events')(client);
-	oAuthServer();
 	await eventSubListener.start(client);
 	await authSubscriber.start(client);
 	cron.start(client);
