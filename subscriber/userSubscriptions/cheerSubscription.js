@@ -13,7 +13,7 @@ module.exports = {
 
 			await Bits.create({
 				user_id: s.userId,
-				amount: s.bit,
+				amount: s.bits,
 				broadcaster_id: s.broadcasterId,
 			});
 		});
