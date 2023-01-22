@@ -13,8 +13,6 @@ module.exports = {
 
 			const subscriberFiles = readdirSync('./subscriber/userSubscriptions').filter(file => file.endsWith('.js'));
 
-			console.log(subscriberFiles);
-
 			for (const file of subscriberFiles) {
 				const subscription = require(`../userSubscriptions/${file}`);
 

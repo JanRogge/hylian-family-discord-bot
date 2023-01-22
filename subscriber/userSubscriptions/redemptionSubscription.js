@@ -12,89 +12,93 @@ module.exports = {
 			},
 		});
 
-		const subscription = await listener.subscribeToChannelRedemptionAddEventsForReward(userId, settings.reward_id, async s => {
-			const today = new Date();
-			const month = today.getMonth() + 1;
-			const year = today.getFullYear();
+		let subscription;
+		if (settings && settings.reward_id) {
+			subscription = await listener.subscribeToChannelRedemptionAddEventsForReward(userId, settings.reward_id, async s => {
+				const today = new Date();
+				const month = today.getMonth() + 1;
+				const year = today.getFullYear();
 
-			const redemption = await Rewards.findOne({
-				where: {
+				const redemption = await Rewards.findOne({
+					where: {
+						user_id: s.userId,
+						broadcaster_id: s.broadcasterId,
+						[Op.and] : [
+							Sequelize.fn('EXTRACT(MONTH from "createdAt") =', month),
+							Sequelize.fn('EXTRACT(YEAR from "createdAt") =', year),
+						],
+					},
+				});
+
+				if (redemption) {
+					const authClient = client.authClients.get(userId);
+
+					console.log(s.userId + 'hatte schon ein Los diesen monat!');
+					// const rewardRedemption = authClient.channelPoints.getRedemptionById(userId, s.rewardId, s.id);
+					// await rewardRedemption.updateStatus('CANCELED');
+
+					return;
+				}
+
+				await Rewards.create({
 					user_id: s.userId,
 					broadcaster_id: s.broadcasterId,
-					[Op.and] : [
-						Sequelize.fn('EXTRACT(MONTH from "createdAt") =', month),
-						Sequelize.fn('EXTRACT(YEAR from "createdAt") =', year),
-					],
-				},
-			});
+					won: false,
+				});
 
-			if (redemption) {
-				const authClient = client.authClients.get(userId);
+				const { channel, message } = await fetchTicketMessage(
+					client,
+					settings.guild_id,
+					{
+						month,
+						year,
+					},
+				);
 
-				console.log(s.userId + 'hatte schon ein Los diesen monat!');
-				//const rewardRedemption = authClient.channelPoints.getRedemptionById(userId, s.rewardId, s.id);
-				//await rewardRedemption.updateStatus('CANCELED');
-
-				return;
-			}
-
-			await Rewards.create({
-				user_id: s.userId,
-				broadcaster_id: s.broadcasterId,
-				won: false,
-			});
-
-			const { channel, message } = await fetchTicketMessage(
-				client,
-				settings.guild_id,
-				{
-					month,
-					year,
-				},
-			);
-
-			if (!message) {
-				return;
-			}
-
-			const { redemptionUsers } = await fetchData(client, { month, year }, userId);
-
-			const sortedUserNames = [];
-			for (const redemptionUser of redemptionUsers) {
-				sortedUserNames.push(redemptionUser.displayName);
-			}
-			sortedUserNames.sort((a, b) => {
-				const nameA = a.toUpperCase();
-				const nameB = b.toUpperCase();
-				if (nameA < nameB) {
-					return -1;
+				if (!message) {
+					return;
 				}
-				if (nameA > nameB) {
-					return 1;
+
+				const { redemptionUsers } = await fetchData(client, { month, year }, userId);
+
+				const sortedUserNames = [];
+				for (const redemptionUser of redemptionUsers) {
+					sortedUserNames.push(redemptionUser.displayName);
 				}
-				return 0;
+				sortedUserNames.sort((a, b) => {
+					const nameA = a.toUpperCase();
+					const nameB = b.toUpperCase();
+					if (nameA < nameB) {
+						return -1;
+					}
+					if (nameA > nameB) {
+						return 1;
+					}
+					return 0;
+				});
+
+				let redemptionsString = '';
+				for (const sortedUserName of sortedUserNames) {
+					redemptionsString += `${sortedUserName}\n`;
+				}
+
+				await updateTicketMessage(
+					message.message_id,
+					channel,
+					{
+						month,
+						year,
+					},
+					redemptionsString,
+					{},
+				);
 			});
-
-			let redemptionsString = '';
-			for (const sortedUserName of sortedUserNames) {
-				redemptionsString += `${sortedUserName}\n`;
-			}
-
-			await updateTicketMessage(
-				message.message_id,
-				channel,
-				{
-					month,
-					year,
-				},
-				redemptionsString,
-				{},
-			);
-		});
-
-		const subscriptionToAll = await listener.subscribeToChannelRedemptionAddEvents(userId, async s => {
-			console.log(`Reward ${s.rewardTitle} mit der ID ${s.rewardId} wurde eingelöst`);
-		});
+		}
+		else {
+			subscription = await listener.subscribeToChannelRedemptionAddEvents(userId, async s => {
+				console.log(`Reward ${s.rewardTitle} mit der ID ${s.rewardId} wurde eingelöst`);
+			});
+		}
 
 		console.log(await subscription.getCliTestCommand());
 
