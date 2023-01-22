@@ -1,16 +1,17 @@
 const cron = require('node-cron');
+const axios = require('axios');
 const { Settings } = require('../dbObjects');
 const { createNewTicketMessage, updateTicketMessage, fetchTicketMessage, fetchData } = require('../components/ticketsMessage');
 
 module.exports = {
 	start(client) {
-		cron.schedule('* * * * *', async function() {
+		cron.schedule('0 1 1 * *', async function() {
 			const guildSettings = await Settings.findAll({
 				where: { cron_active: true },
 			});
 
 			for (const settings of guildSettings) {
-				const today = new Date('2023-02-01');
+				const today = new Date();
 				let month = today.getMonth();
 				let year = today.getFullYear();
 
@@ -72,6 +73,13 @@ module.exports = {
 		}, {
 			scheduled: true,
 			timezone: 'Europe/Berlin',
+		});
+
+		cron.schedule('10 * * * *', async function() {
+			axios.post(`https://${process.env.APP_NAME}.herokuapp.com/`)
+				.then(function(response) {
+					console.log(response);
+				});
 		});
 	},
 };
