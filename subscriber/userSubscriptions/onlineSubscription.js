@@ -9,7 +9,16 @@ module.exports = {
 			console.log(s.broadcasterName);
 
 			const stream = await s.getStream();
+
+			if (!stream) {
+				return;
+			}
+
 			const user = await s.getBroadcaster();
+
+			if (!user) {
+				return;
+			}
 
 			const settings = await Settings.findOne({
 				where: {
