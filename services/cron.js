@@ -79,6 +79,8 @@ module.exports = {
 			axios.get(`https://${process.env.APP_NAME}.herokuapp.com/`)
 				.then(function() {
 					console.log('Ping');
+					const used = process.memoryUsage().heapUsed / 1024 / 1024;
+					console.log(`The script uses approximately ${used} MB`);
 				})
 				.catch(function(error) {
 					console.log(error);
