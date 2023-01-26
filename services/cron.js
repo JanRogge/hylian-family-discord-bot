@@ -75,7 +75,7 @@ module.exports = {
 			timezone: 'Europe/Berlin',
 		});
 
-		cron.schedule('0,15,30,45', async function() {
+		cron.schedule('0,10,20,30,40,50 * * * *', async function() {
 			const used = process.memoryUsage().heapUsed / 1024 / 1024;
 			const rss = process.memoryUsage().rss / 1024 / 1024;
 			console.log(`The script uses approximately ${used} MB`);
