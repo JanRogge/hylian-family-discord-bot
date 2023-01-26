@@ -22,7 +22,7 @@
     "dotenv": "^8.2.0",
     "eslint": "^7.19.0",
     "keyv": "^4.0.3",
-    "node-cron": "^3.0.2",
+    "node-cron": "3.0.0",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.5.0"
