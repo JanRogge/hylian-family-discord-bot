@@ -34,6 +34,8 @@ module.exports = {
 		}
 
 		const userAuthClient = client.authClients.get(broadcaster);
+		console.log(`${date.year}-${date.month}-01T08:00:00.0Z`);
+		/*
 		const leaderboard = userAuthClient.bits.getLeaderboard({
 			count: 2,
 			period: 'month',
@@ -48,6 +50,8 @@ module.exports = {
 				topCheerer = await authClient.users.getUserById(leaderboard.entries[1].userId);
 			}
 		}
+
+		*/
 
 		/*
 		const bits = await Bits.findOne({
