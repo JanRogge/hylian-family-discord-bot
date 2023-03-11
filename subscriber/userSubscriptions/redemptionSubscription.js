@@ -18,10 +18,7 @@ module.exports = {
 		test1 = String(test1).padStart(2, '0');
 
 		const userAuthClient = client.authClients.get(userId);
-		console.log(`${test2}-${test1}-01T08:00:00.0Z`);
-		console.log(new Date(`${test2}-${test1}-01T08:00:00.0Z`).toISOString());
-		
-		const leaderboard = userAuthClient.bits.getLeaderboard(
+		const leaderboard = await userAuthClient.bits.getLeaderboard(
 			userId,
 			{
 				count: 2,
