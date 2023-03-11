@@ -12,23 +12,6 @@ module.exports = {
 			},
 		});
 
-		const blub = new Date();
-		let test1 = blub.getMonth() + 1;
-		const test2 = blub.getFullYear();
-		test1 = String(test1).padStart(2, '0');
-
-		const userAuthClient = client.authClients.get(userId);
-		const leaderboard = await userAuthClient.bits.getLeaderboard(
-			userId,
-			{
-				count: 2,
-				period: 'month',
-				startDate: new Date(`${test2}-${test1}-01T08:00:00.0Z`),
-			},
-		);
-
-		console.log(leaderboard);
-
 		let subscription;
 		if (settings && settings.reward_id) {
 			subscription = await listener.subscribeToChannelRedemptionAddEventsForReward(userId, settings.reward_id, async s => {
