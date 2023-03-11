@@ -13,8 +13,12 @@ module.exports = {
 		});
 
 		const blub = new Date();
-		const test1 = blub.getMonth() + 1;
+		let test1 = blub.getMonth() + 1;
 		const test2 = blub.getFullYear();
+
+		if (test1.length != 2) {
+			test1 = String(test1).padStart(1, '0');
+		}
 
 		const userAuthClient = client.authClients.get(userId);
 		console.log(`${test2}-${test1}-01T08:00:00.0Z`);
@@ -28,6 +32,8 @@ module.exports = {
 				startDate: new Date(`${test2}-${test1}-01T08:00:00.0Z`),
 			},
 		);
+
+		console.log(leaderboard);
 
 		let subscription;
 		if (settings && settings.reward_id) {
