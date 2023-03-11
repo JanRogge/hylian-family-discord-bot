@@ -36,11 +36,14 @@ module.exports = {
 		const userAuthClient = client.authClients.get(broadcaster);
 		console.log(`${date.year}-${date.month}-01T08:00:00.0Z`);
 		/*
-		const leaderboard = userAuthClient.bits.getLeaderboard({
-			count: 2,
-			period: 'month',
-			startDate: new Date(`${date.year}-${date.month}-01T08:00:00.0Z`),
-		});
+		const leaderboard = userAuthClient.bits.getLeaderboard(
+			broadcaster,
+			{
+				count: 2,
+				period: 'month',
+				startDate: new Date(`${date.year}-${date.month}-01T08:00:00.0Z`),
+			}
+			);
 
 		if (leaderboard.entries.length >= 1) {
 			if (gifts.user_id !== leaderboard.entries[0].userId) {
