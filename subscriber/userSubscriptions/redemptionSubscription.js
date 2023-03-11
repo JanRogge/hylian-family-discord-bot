@@ -15,10 +15,7 @@ module.exports = {
 		const blub = new Date();
 		let test1 = blub.getMonth() + 1;
 		const test2 = blub.getFullYear();
-
-		if (test1.length != 2) {
-			test1 = String(test1).padStart(1, '0');
-		}
+		test1 = String(test1).padStart(2, '0');
 
 		const userAuthClient = client.authClients.get(userId);
 		console.log(`${test2}-${test1}-01T08:00:00.0Z`);
