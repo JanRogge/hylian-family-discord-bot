@@ -12,8 +12,8 @@ module.exports = {
 
 		const authProvider = new RefreshingAuthProvider(
 			{
-				clientId: process.env.TWITCHCLIENTID,
-				clientSecret: process.env.TWITCHCLIENTSECRET,
+				clientId: process.env.TWITCH_CLIENT_ID,
+				clientSecret: process.env.TWITCH_CLIENT_SECRET,
 				onRefresh: async newTokenData => await TwitchAuth.update({
 					accessToken: newTokenData.access_token,
 					refreshToken: newTokenData.refresh_token,
