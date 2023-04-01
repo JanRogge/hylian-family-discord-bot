@@ -1,4 +1,4 @@
-const { ClientCredentialsAuthProvider } = require('@twurple/auth');
+const { AppTokenAuthProvider } = require('@twurple/auth');
 const { ApiClient } = require('@twurple/api');
 const { EventSubHttpListener, EnvPortAdapter } = require('@twurple/eventsub-http');
 const { NgrokAdapter } = require('@twurple/eventsub-ngrok');
@@ -6,7 +6,7 @@ const { Collection } = require('discord.js');
 
 module.exports = {
 	async start(client) {
-		const authProvider = new ClientCredentialsAuthProvider(process.env.TWITCH_CLIENT_ID, process.env.TWITCH_CLIENT_SECRET);
+		const authProvider = new AppTokenAuthProvider(process.env.TWITCH_CLIENT_ID, process.env.TWITCH_CLIENT_SECRET);
 		const apiClient = new ApiClient({ authProvider });
 		let adapter;
 
@@ -25,15 +25,15 @@ module.exports = {
 		const listener = new EventSubHttpListener({
 			apiClient,
 			adapter: adapter,
-			secret: 'bluber',
+			secret: 'hyperSecretWord',
 			strictHostCheck: true,
+			legacySecrets: true,
 		});
 		await listener.start();
 
 		client.listener = listener;
-		client.authClients = new Collection();
 		client.subs = new Collection();
 
-		client.authClients.set('app', apiClient);
+		client.appClient = apiClient;
 	},
 };

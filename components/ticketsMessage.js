@@ -7,7 +7,7 @@ const monthNames = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
 
 module.exports = {
 	fetchData: async function(client, date, broadcaster) {
-		const authClient = client.authClients.get('app');
+		const authClient = client.apiClient;
 		let topCheerer;
 		let topGifter;
 		let redemptionUsers;
@@ -33,12 +33,10 @@ module.exports = {
 			topGifter = await authClient.users.getUserById(gifts.user_id);
 		}
 
-		const userAuthClient = client.authClients.get(broadcaster);
-
 		console.log(date);
 		console.log(`${date.year}-${String(date.month).padStart(2, '0')}-01T08:00:00.0Z`);
 
-		const leaderboard = await userAuthClient.bits.getLeaderboard(
+		const leaderboard = await client.apiClient.bits.getLeaderboard(
 			broadcaster,
 			{
 				count: 2,

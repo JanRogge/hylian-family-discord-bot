@@ -6,6 +6,8 @@ const twitchApiClient = require('../../services/twitchApiClient');
 
 module.exports = {
 	async start(client) {
+		await twitchApiClient.start(client);
+
 		const guildSettings = await Settings.findAll({
 			where: {
 				twitch_id: {
@@ -18,7 +20,7 @@ module.exports = {
 		}
 
 		const listener = client.listener;
-		const authSubscription = await listener.subscribeToUserAuthorizationGrantEvents(process.env.TWITCH_CLIENT_ID, async e => {
+		const authSubscription = await listener.onUserAuthorizationGrant(process.env.TWITCH_CLIENT_ID, async e => {
 			console.log(`${e.userId} just added auth!`);
 			await this.add(client, e.userId);
 		});
@@ -26,7 +28,7 @@ module.exports = {
 		console.log(await authSubscription.getCliTestCommand());
 	},
 	async add(client, userId) {
-		await twitchApiClient.start(client, userId);
+		await twitchApiClient.addUser(client, userId);
 
 		client.subs.set(userId, new Collection());
 

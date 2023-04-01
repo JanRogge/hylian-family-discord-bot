@@ -14,7 +14,7 @@ module.exports = {
 
 		let subscription;
 		if (settings && settings.reward_id) {
-			subscription = await listener.subscribeToChannelRedemptionAddEventsForReward(userId, settings.reward_id, async s => {
+			subscription = await listener.onChannelRedemptionAddForReward(userId, settings.reward_id, async s => {
 				const today = new Date();
 				const month = today.getMonth() + 1;
 				const year = today.getFullYear();
@@ -31,10 +31,8 @@ module.exports = {
 				});
 
 				if (redemption) {
-					const authClient = client.authClients.get(userId);
-
 					console.log(s.userId + 'hatte schon ein Los diesen monat!');
-					// const rewardRedemption = authClient.channelPoints.getRedemptionById(userId, s.rewardId, s.id);
+					// const rewardRedemption = client.apiClient.channelPoints.getRedemptionById(userId, s.rewardId, s.id);
 					// await rewardRedemption.updateStatus('CANCELED');
 
 					return;
@@ -95,7 +93,7 @@ module.exports = {
 			});
 		}
 		else {
-			subscription = await listener.subscribeToChannelRedemptionAddEvents(userId, async s => {
+			subscription = await listener.onChannelRedemptionAdd(userId, async s => {
 				console.log(`Reward ${s.rewardTitle} mit der ID ${s.rewardId} wurde eingelöst`);
 			});
 		}

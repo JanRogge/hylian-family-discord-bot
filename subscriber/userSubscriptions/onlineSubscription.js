@@ -5,7 +5,7 @@ module.exports = {
 	name: 'onlineSubscription',
 	async start(client, userId) {
 		const listener = client.listener;
-		const subscription = await listener.subscribeToStreamOnlineEvents(userId, async s => {
+		const subscription = await listener.onStreamOnline(userId, async s => {
 			console.log(s.broadcasterName);
 
 			const stream = await s.getStream();

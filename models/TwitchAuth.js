@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
 			unique: true,
 		},
 		expires_in: DataTypes.INTEGER,
-		obtainment_timestamp: DataTypes.INTEGER,
+		obtainment_timestamp: DataTypes.STRING,
 		scope: DataTypes.ARRAY(DataTypes.STRING),
 		user_id: {
 			type: DataTypes.STRING,

@@ -112,7 +112,7 @@ module.exports = {
 		await interaction.reply({ content: 'Gewinner wurde eingetragen!', ephemeral: true });
 	},
 	async autocomplete(interaction) {
-		const authClient = interaction.client.authClients.get('app');
+		const authClient = interaction.client.apiClient;
 
 		const settings = await Settings.findOne({
 			where: { guild_id: interaction.guildId },

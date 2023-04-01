@@ -4,7 +4,7 @@ module.exports = {
 	name: 'giftSubscription',
 	async start(client, userId) {
 		const listener = client.listener;
-		const subscription = await listener.subscribeToChannelSubscriptionGiftEvents(userId, async s => {
+		const subscription = await listener.onChannelSubscriptionGift(userId, async s => {
 			console.log(s.broadcasterName);
 
 			if (s.isAnonymous) {

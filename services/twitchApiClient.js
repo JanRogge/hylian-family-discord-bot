@@ -3,24 +3,17 @@ const { ApiClient } = require('@twurple/api');
 const { TwitchAuth } = require('../dbObjects');
 
 module.exports = {
-	async start(client, userId) {
-		const tokens = await TwitchAuth.findOne({ where: { user_id: userId } });
-
-		if (!tokens) {
-			return;
-		}
-
+	async start(client) {
 		const authProvider = new RefreshingAuthProvider(
 			{
 				clientId: process.env.TWITCH_CLIENT_ID,
 				clientSecret: process.env.TWITCH_CLIENT_SECRET,
-				onRefresh: async function(newTokenData) {
+				onRefresh: async function(userId, newTokenData) {
 					console.log(newTokenData);
 					await TwitchAuth.update({
-						accessToken: newTokenData.access_token,
-						refreshToken: newTokenData.refresh_token,
-						expiresIn: newTokenData.expires_in,
-						obtainmentTimestamp: newTokenData.obtainment_timestamp,
+						access_token: newTokenData.accessToken,
+						expires_in: newTokenData.expiresIn,
+						obtainment_timestamp: newTokenData.obtainmentTimestamp,
 					}, { where: { user_id: userId } });
 				},
 				onRefreshFailure: async function(newTokenData) {
@@ -28,15 +21,29 @@ module.exports = {
 					console.log('failed');
 				},
 			},
-			{
-				accessToken: tokens.access_token,
-				refreshToken: tokens.refresh_token,
-				expiresIn: tokens.expires_in,
-				obtainmentTimestamp: tokens.obtainment_timestamp,
-			},
 		);
 		const apiClient = new ApiClient({ authProvider });
 
-		client.authClients.set(userId, apiClient);
+		client.apiClient = apiClient;
+		client.authProvider = authProvider;
+	},
+
+	async addUser(client, userId) {
+		const tokens = await TwitchAuth.findOne({ where: { user_id: userId } });
+
+		if (!tokens) {
+			return;
+		}
+
+		await client.authProvider.addUserForToken({
+			accessToken: tokens.access_token,
+			refreshToken: tokens.refresh_token,
+			expiresIn: tokens.expires_in,
+			obtainmentTimestamp: tokens.obtainment_timestamp,
+			scope: tokens.scope,
+		});
+		const apiClient = new ApiClient({ authProvider: client.authProvider });
+
+		client.apiClient = apiClient;
 	},
 };
