@@ -35,6 +35,9 @@ module.exports = {
 
 		const userAuthClient = client.authClients.get(broadcaster);
 
+		console.log(date);
+		console.log(`${date.year}-${String(date.month).padStart(2, '0')}-01T08:00:00.0Z`);
+
 		const leaderboard = await userAuthClient.bits.getLeaderboard(
 			broadcaster,
 			{
@@ -43,6 +46,10 @@ module.exports = {
 				startDate: new Date(`${date.year}-${String(date.month).padStart(2, '0')}-01T08:00:00.0Z`),
 			},
 		);
+
+		console.log(leaderboard.entries);
+		console.log(leaderboard.entries[0]);
+		console.log(leaderboard.entries[1]);
 
 		if (leaderboard.entries.length >= 1) {
 			if (gifts.user_id !== leaderboard.entries[0].userId) {

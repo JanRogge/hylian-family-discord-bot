@@ -20,6 +20,9 @@ module.exports = {
 					year -= 1;
 				}
 
+				console.log(month);
+				console.log(year);
+
 				const { channel, message } = await fetchTicketMessage(
 					client,
 					settings.guild_id,
