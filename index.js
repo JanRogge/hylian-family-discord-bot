@@ -3,7 +3,7 @@ const { Client, GatewayIntentBits } = require('discord.js');
 const eventSubListener = require('./services/eventSubListener');
 const cron = require('./services/cron');
 const authSubscriber = require('./subscriber/appSubscriptions/authSubscriber');
-const { Rewards, Settings } = require('../../dbObjects');
+const { Rewards, Settings } = require('.dbObjects');
 
 const client = new Client(
 	{
