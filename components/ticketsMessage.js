@@ -42,7 +42,7 @@ module.exports = {
 			},
 		);
 
-		if (leaderboard.entries.length >= 1) {
+		if (leaderboard.entries.length >= 1 && gifts) {
 			if (gifts.user_id !== leaderboard.entries[0].userId) {
 				topCheerer = await authClient.users.getUserById(leaderboard.entries[0].userId);
 			}
