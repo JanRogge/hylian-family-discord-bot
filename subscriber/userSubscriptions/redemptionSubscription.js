@@ -15,6 +15,8 @@ module.exports = {
 		let subscription;
 		if (settings && settings.reward_id) {
 			subscription = await listener.onChannelRedemptionAddForReward(userId, settings.reward_id, async s => {
+				console.log('Redemption');
+
 				const today = new Date();
 				const month = today.getMonth() + 1;
 				const year = today.getFullYear();
