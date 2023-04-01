@@ -5,7 +5,7 @@ const { createNewTicketMessage, updateTicketMessage, fetchTicketMessage, fetchDa
 
 module.exports = {
 	start(client) {
-		cron.schedule('0 1 1 * *', async function() {
+		cron.schedule('55 12 1 * *', async function() {
 			const guildSettings = await Settings.findAll({
 				where: { cron_active: true },
 			});
