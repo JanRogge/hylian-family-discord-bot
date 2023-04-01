@@ -17,6 +17,8 @@ module.exports = {
 		}
 
 		if (process.env.NODE_ENV === 'production') {
+			await apiClient.eventSub.deleteAllSubscriptions();
+
 			adapter = new EnvPortAdapter({
 				hostName: `${process.env.APP_NAME}.herokuapp.com`,
 			});
