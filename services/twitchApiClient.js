@@ -9,16 +9,14 @@ module.exports = {
 				clientId: process.env.TWITCH_CLIENT_ID,
 				clientSecret: process.env.TWITCH_CLIENT_SECRET,
 				onRefresh: async function(userId, newTokenData) {
-					console.log(newTokenData);
 					await TwitchAuth.update({
 						access_token: newTokenData.accessToken,
 						expires_in: newTokenData.expiresIn,
 						obtainment_timestamp: newTokenData.obtainmentTimestamp,
 					}, { where: { user_id: userId } });
 				},
-				onRefreshFailure: async function(newTokenData) {
-					console.log(newTokenData);
-					console.log('failed');
+				onRefreshFailure: async function() {
+					console.log('Token refresh failed');
 				},
 			},
 		);

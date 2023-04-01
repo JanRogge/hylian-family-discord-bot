@@ -5,7 +5,7 @@ const { createNewTicketMessage, updateTicketMessage, fetchTicketMessage, fetchDa
 
 module.exports = {
 	start(client) {
-		cron.schedule('10 14 1 * *', async function() {
+		cron.schedule('0 4 1 * *', async function() {
 			const guildSettings = await Settings.findAll({
 				where: { cron_active: true },
 			});
@@ -19,9 +19,6 @@ module.exports = {
 					month = 12;
 					year -= 1;
 				}
-
-				console.log(month);
-				console.log(year);
 
 				const { channel, message } = await fetchTicketMessage(
 					client,
