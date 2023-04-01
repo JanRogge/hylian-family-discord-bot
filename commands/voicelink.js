@@ -1,23 +1,23 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { VoiceRoleLink } = require('../../dbObjects');
+const { VoiceRoleLink } = require('../dbObjects');
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('voicelink')
 		.setDescription('Create or edit a voicelink between a voicechannel and a role.')
-        .addSubcommand(subcommmand =>
-            subcommmand.setName('add')
-                .setDescription('Add a voicelink between and a role and a voice channel.')
-                .addRoleOption(option => option.setName('role').setDescription('Name of the role that should be added when joining the voice channel.').setRequired(true))
+		.addSubcommand(subcommmand =>
+			subcommmand.setName('add')
+				.setDescription('Add a voicelink between and a role and a voice channel.')
+				.addRoleOption(option => option.setName('role').setDescription('Name of the role that should be added when joining the voice channel.').setRequired(true)),
 
-        )
-        .addSubcommand(subcommmand =>
-            subcommmand.setName('delete')
-                .setDescription('Remove a voicelink between and a role and a voice channel.')
-                .addRoleOption(option => option.setName('role').setDescription('Name of the role that should be removed when leaving the voice channel.').setRequired(true))
+		)
+		.addSubcommand(subcommmand =>
+			subcommmand.setName('delete')
+				.setDescription('Remove a voicelink between and a role and a voice channel.')
+				.addRoleOption(option => option.setName('role').setDescription('Name of the role that should be removed when leaving the voice channel.').setRequired(true)),
 
-        )
-        .setDefaultPermission(false),
+		)
+		.setDefaultPermission(false),
 	async execute(interaction) {
 		if (interaction.options.getSubcommand() === 'add') {
 			if (!interaction.member.voice.channelId) return await interaction.reply({ content: 'Du musst für diesen Befehl in gewünschten Voice Channel sein!', ephemeral: true });
@@ -81,10 +81,10 @@ module.exports = {
 			}
 		}
 	},
-    async disable(interaction) {
-        await VoiceRoleLink.destroy({ where: { guild_id: interaction.guild.id } });
-    },
-    async enable() {
-        return;
-    },
+	async disable(interaction) {
+		await VoiceRoleLink.destroy({ where: { guild_id: interaction.guild.id } });
+	},
+	async enable() {
+		return;
+	},
 };

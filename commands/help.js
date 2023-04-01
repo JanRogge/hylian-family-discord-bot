@@ -4,11 +4,11 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('help')
 		.setDescription('Shows all available commands')
-        .addStringOption(option =>
-            option.setName('command')
-                .setDescription('Name of a Command')
-                .setRequired(false))
-        .setDefaultPermission(true),
+		.addStringOption(option =>
+			option.setName('command')
+				.setDescription('Name of a Command')
+				.setRequired(false))
+		.setDefaultPermission(true),
 	async execute(interaction) {
 		const commandName = interaction.options.getString('command');
 		const data = [];

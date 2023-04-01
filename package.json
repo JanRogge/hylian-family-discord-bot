@@ -5,19 +5,24 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node .",
+    "startBot": "node .",
+    "startServer": "node oAuthServer.js",
     "lint": "eslint ."
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@discordjs/rest": "^0.4.1",
     "@keyv/postgres": "^1.0.16",
-    "discord-api-types": "^0.32.0",
+    "@twurple/api": "^6.0.0",
+    "@twurple/auth": "^6.0.0",
+    "@twurple/eventsub-ngrok": "^6.0.0",
+    "@twurple/eventsub-ws": "^6.0.0",
+    "axios": "^1.2.3",
     "discord.js": "^14.0.0",
     "dotenv": "^8.2.0",
     "eslint": "^7.19.0",
     "keyv": "^4.0.3",
+    "node-cron": "3.0.0",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.5.0"
