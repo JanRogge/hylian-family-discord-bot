@@ -31,7 +31,6 @@ module.exports = {
 			where: {
 				guild_id: settings.guild_id,
 				name: interaction.options.getString('monat-jahr'),
-				done: false,
 			},
 		});
 
