@@ -68,7 +68,7 @@ module.exports = {
 		});
 
 		for (const sortedUserName of sortedUserNames) {
-			if (sortedUserName === winner.displayName) {
+			if (winner && sortedUserName === winner.displayName) {
 				redemptionsString += `*${sortedUserName} (Winner)*\n`;
 			}
 			else {

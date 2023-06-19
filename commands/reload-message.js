@@ -64,7 +64,7 @@ module.exports = {
 		});
 
 		for (const sortedUserName of sortedUserNames) {
-			if (sortedUserName === winner.displayName) {
+			if (winner && sortedUserName === winner.displayName) {
 				redemptionsString += `*${sortedUserName} (Winner)*\n`;
 			}
 			else {
@@ -87,7 +87,7 @@ module.exports = {
 			},
 		);
 
-		await interaction.reply({ content: 'Bits wurde geändert!', ephemeral: true });
+		await interaction.reply({ content: 'Nachricht wurde neugeladen!', ephemeral: true });
 	},
 	async autocomplete(interaction) {
 		const settings = await Settings.findOne({
