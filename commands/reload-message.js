@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { Rewards, Messages, Settings } = require('../dbObjects');
-const { Sequelize, Op } = require('sequelize');
+const { Messages, Settings } = require('../dbObjects');
 const { updateTicketMessage, fetchData } = require('../components/ticketsMessage');
 
 const monthNames = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
@@ -10,16 +9,11 @@ const monthNames = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('select-a-winner')
-		.setDescription('Select a winner for a given month.')
+		.setName('reload-message')
+		.setDescription('Reload a message for a given month/year.')
 		.addStringOption(option =>
 			option.setName('monat-jahr')
-				.setDescription('Phrase to search for')
-				.setAutocomplete(true)
-				.setRequired(true))
-		.addStringOption(option =>
-			option.setName('user')
-				.setDescription('Phrase to search for')
+				.setDescription('Month to search for')
 				.setAutocomplete(true)
 				.setRequired(true)),
 	async execute(interaction) {
@@ -52,7 +46,7 @@ module.exports = {
 		let redemptionsString = '';
 		const sortedUserNames = [];
 		for (const redemptionUser of redemptionUsers) {
-			if (redemptionUser.displayName === interaction.options.getString('user')) {
+			if (redemptionUser.won) {
 				winner = redemptionUser;
 			}
 			sortedUserNames.push(redemptionUser.displayName);
@@ -70,7 +64,7 @@ module.exports = {
 		});
 
 		for (const sortedUserName of sortedUserNames) {
-			if (sortedUserName === interaction.options.getString('user')) {
+			if (sortedUserName === winner.displayName) {
 				redemptionsString += `*${sortedUserName} (Winner)*\n`;
 			}
 			else {
@@ -93,27 +87,9 @@ module.exports = {
 			},
 		);
 
-		await Messages.update(
-			{ done: true },
-			{
-				where: {
-					id: message.id,
-				},
-			});
-
-		await Rewards.update(
-			{ won: true },
-			{
-				where: {
-					user_id: winner.id,
-				},
-			});
-
-		await interaction.reply({ content: 'Gewinner wurde eingetragen!', ephemeral: true });
+		await interaction.reply({ content: 'Bits wurde geändert!', ephemeral: true });
 	},
 	async autocomplete(interaction) {
-		const authClient = interaction.client.apiClient;
-
 		const settings = await Settings.findOne({
 			where: { guild_id: interaction.guildId },
 		});
@@ -131,40 +107,11 @@ module.exports = {
 				where: {
 					guild_id: settings.guild_id,
 					channel_id: settings.reward_channel_id,
-					done: false,
 				},
 			});
 
 			for (const message of messages) {
 				choices.push(message.name);
-			}
-		}
-
-		if (focusedOption.name === 'user') {
-			const dateOption = interaction.options.get('monat-jahr', true);
-			const dateSeperate = dateOption.value.split(' ');
-
-			const userIds = [];
-
-			const redemptions = await Rewards.findAll({
-				where: {
-					[Op.and] : [
-						Sequelize.fn('EXTRACT(MONTH from "createdAt") =', monthNames.indexOf(dateSeperate[0]) + 1),
-						Sequelize.fn('EXTRACT(YEAR from "createdAt") =', dateSeperate[1]),
-					],
-					broadcaster_id: settings.twitch_id,
-				},
-			});
-
-
-			for (const redemption of redemptions) {
-				userIds.push(redemption.user_id);
-			}
-
-			const users = await authClient.users.getUsersByIds(userIds);
-
-			for (const user of users) {
-				choices.push(user.displayName);
 			}
 		}
 

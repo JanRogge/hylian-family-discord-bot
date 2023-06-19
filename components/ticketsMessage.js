@@ -1,4 +1,4 @@
-const { Messages, Settings, Bits, Gifts, Rewards } = require('../dbObjects');
+const { Messages, Settings, Gifts, Rewards } = require('../dbObjects');
 const { Sequelize, Op } = require('sequelize');
 
 const monthNames = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
@@ -50,33 +50,6 @@ module.exports = {
 				topCheerer = await authClient.users.getUserById(leaderboard.entries[1].userId);
 			}
 		}
-
-		/*
-		const bits = await Bits.findOne({
-			attributes: [
-				'user_id',
-				[Sequelize.fn('sum', Sequelize.col('amount')), 'totalBits'],
-			],
-			where: {
-				[Op.and] : [
-					Sequelize.fn('EXTRACT(MONTH from "createdAt") =', date.month),
-					Sequelize.fn('EXTRACT(YEAR from "createdAt") =', date.year),
-				],
-				user_id: {
-					[Op.ne]: gifts.user_id,
-				},
-				broadcaster_id: broadcaster,
-			},
-			order: [
-				['totalBits', 'DESC'],
-			],
-			group: 'user_id',
-		});
-
-		if (bits) {
-			topCheerer = await authClient.users.getUserById(bits.user_id);
-		}
-		*/
 
 		const redemptions = await Rewards.findAll({
 			attributes: [
