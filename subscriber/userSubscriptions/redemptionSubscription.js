@@ -32,10 +32,20 @@ module.exports = {
 					},
 				});
 
+
+				let rewardRedemption;
+				try {
+					rewardRedemption = client.apiClient.channelPoints.getRedemptionById(userId, s.rewardId, s.id);
+				}
+				catch (error) {
+					console.log('Error fetching channel point redemption automatic cancelation not possible');
+				}
+
 				if (redemption) {
-					console.log(s.userId + 'hatte schon ein Los diesen monat!');
-					// const rewardRedemption = client.apiClient.channelPoints.getRedemptionById(userId, s.rewardId, s.id);
-					// await rewardRedemption.updateStatus('CANCELED');
+					console.log(s.userId + 'hat schon ein Los diesen Monat eingelöst!');
+					if (rewardRedemption) {
+						await rewardRedemption.updateStatus('CANCELED');
+					}
 
 					return;
 				}
@@ -45,6 +55,10 @@ module.exports = {
 					broadcaster_id: s.broadcasterId,
 					won: false,
 				});
+
+				if (rewardRedemption) {
+					// await rewardRedemption.updateStatus('FULFILLED');
+				}
 
 				const { channel, message } = await fetchTicketMessage(
 					client,
