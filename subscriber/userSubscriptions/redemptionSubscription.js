@@ -35,7 +35,7 @@ module.exports = {
 
 				let rewardRedemption;
 				try {
-					rewardRedemption = client.apiClient.channelPoints.getRedemptionById(userId, s.rewardId, s.id);
+					rewardRedemption = await client.apiClient.channelPoints.getRedemptionById(userId, s.rewardId, s.id);
 				}
 				catch (error) {
 					console.log('Error fetching channel point redemption automatic cancelation not possible');
