@@ -39,6 +39,7 @@ module.exports = {
 				}
 				catch (error) {
 					console.log('Error fetching channel point redemption automatic cancelation not possible');
+					console.log(error);
 				}
 
 				if (redemption) {
