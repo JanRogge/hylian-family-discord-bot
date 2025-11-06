@@ -8,18 +8,22 @@ module.exports = {
 			{
 				clientId: process.env.TWITCH_CLIENT_ID,
 				clientSecret: process.env.TWITCH_CLIENT_SECRET,
-				onRefresh: async function(userId, newTokenData) {
-					await TwitchAuth.update({
-						access_token: newTokenData.accessToken,
-						expires_in: newTokenData.expiresIn,
-						obtainment_timestamp: newTokenData.obtainmentTimestamp,
-					}, { where: { user_id: userId } });
-				},
-				onRefreshFailure: async function() {
-					console.log('Token refresh failed');
-				},
 			},
 		);
+
+		// Twurple v7: Bind refresh callbacks using event emitter pattern
+		authProvider.onRefresh(async (userId, newTokenData) => {
+			await TwitchAuth.update({
+				access_token: newTokenData.accessToken,
+				expires_in: newTokenData.expiresIn,
+				obtainment_timestamp: newTokenData.obtainmentTimestamp,
+			}, { where: { user_id: userId } });
+		});
+
+		authProvider.onRefreshFailure(async (userId, error) => {
+			console.log('Token refresh failed for user:', userId, error);
+		});
+
 		const apiClient = new ApiClient({ authProvider });
 
 		client.apiClient = apiClient;
