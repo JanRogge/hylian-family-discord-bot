@@ -4,22 +4,22 @@ const { TwitchAuth } = require('../dbObjects');
 
 module.exports = {
 	async start(client) {
-		const authProvider = new RefreshingAuthProvider(
-			{
-				clientId: process.env.TWITCH_CLIENT_ID,
-				clientSecret: process.env.TWITCH_CLIENT_SECRET,
-				onRefresh: async function(userId, newTokenData) {
-					await TwitchAuth.update({
-						access_token: newTokenData.accessToken,
-						expires_in: newTokenData.expiresIn,
-						obtainment_timestamp: newTokenData.obtainmentTimestamp,
-					}, { where: { user_id: userId } });
-				},
-				onRefreshFailure: async function() {
-					console.log('Token refresh failed');
-				},
-			},
-		);
+		const authProvider = new RefreshingAuthProvider({
+			clientId: process.env.TWITCH_CLIENT_ID,
+			clientSecret: process.env.TWITCH_CLIENT_SECRET,
+		});
+
+		authProvider.onRefresh(async (userId, newTokenData) => {
+			await TwitchAuth.update({
+				access_token: newTokenData.accessToken,
+				expires_in: newTokenData.expiresIn,
+				obtainment_timestamp: newTokenData.obtainmentTimestamp,
+			}, { where: { user_id: userId } });
+		});
+
+		authProvider.onRefreshFailure(async (userId, error) => {
+			console.log('Token refresh failed', userId, error);
+		});
 		const apiClient = new ApiClient({ authProvider });
 
 		client.apiClient = apiClient;

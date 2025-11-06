@@ -24,10 +24,9 @@ module.exports = {
 
 		const listener = new EventSubHttpListener({
 			apiClient,
-			adapter: adapter,
+			adapter,
 			secret: 'hyperSecretWord',
 			strictHostCheck: true,
-			legacySecrets: true,
 		});
 		await listener.start();
 
